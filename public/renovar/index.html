@@ -1,0 +1,5138 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#071226" />
+  <title>PRIMECEL | Renovar v52</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+  <style>
+    :root {
+      --bg: #071226;
+      --bg2: #0b1c39;
+      --card: rgba(255,255,255,.075);
+      --card2: rgba(255,255,255,.105);
+      --line: rgba(255,255,255,.13);
+      --line2: rgba(93, 181, 255, .34);
+      --text: #f7fbff;
+      --muted: rgba(247,251,255,.64);
+      --muted2: rgba(247,251,255,.42);
+      --blue: #2c8dff;
+      --cyan: #4cd8ff;
+      --green: #3fe59f;
+      --yellow: #ffd76f;
+      --red: #ff5b75;
+      --shadow: 0 20px 55px rgba(0,0,0,.36);
+      --radius: 26px;
+      --radius2: 18px;
+      --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      font-family: var(--font);
+      color: var(--text);
+      background:
+        radial-gradient(circle at 50% -10%, rgba(44,141,255,.38), transparent 24rem),
+        radial-gradient(circle at 90% 20%, rgba(76,216,255,.14), transparent 18rem),
+        linear-gradient(160deg, var(--bg), var(--bg2));
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .24;
+      background-image:
+        linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px);
+      background-size: 38px 38px;
+      mask-image: linear-gradient(to bottom, black, transparent 80%);
+    }
+
+    button, input { font: inherit; }
+
+    button {
+      border: 0;
+      color: inherit;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .app {
+      width: min(100%, 430px);
+      min-height: 100svh;
+      margin: 0 auto;
+      padding: max(18px, env(safe-area-inset-top)) 16px max(22px, env(safe-area-inset-bottom));
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .screen {
+      display: none;
+      min-height: calc(100svh - 40px);
+    }
+
+    .screen.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .login-screen {
+      justify-content: center;
+    }
+
+    .brand {
+      text-align: center;
+      margin-bottom: 26px;
+    }
+
+    .logo {
+      width: 68px;
+      height: 68px;
+      margin: 0 auto 14px;
+      display: grid;
+      place-items: center;
+      border-radius: 24px;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      box-shadow: 0 18px 42px rgba(44,141,255,.34);
+      font-size: 28px;
+      font-weight: 950;
+      letter-spacing: -.08em;
+    }
+
+    .brand h1 {
+      margin: 0 0 7px;
+      font-size: 28px;
+      line-height: 1;
+      letter-spacing: -.055em;
+    }
+
+    .brand p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.13), rgba(255,255,255,.065)),
+        rgba(7,18,38,.74);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .login-card {
+      padding: 20px;
+    }
+
+    .form {
+      display: grid;
+      gap: 13px;
+    }
+
+    label {
+      display: grid;
+      gap: 8px;
+      color: rgba(247,251,255,.78);
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    input {
+      width: 100%;
+      border: 1px solid rgba(255,255,255,.14);
+      outline: 0;
+      border-radius: 17px;
+      padding: 15px;
+      color: var(--text);
+      background: rgba(0,0,0,.20);
+      transition: border-color .18s ease, box-shadow .18s ease;
+    }
+
+    input::placeholder {
+      color: rgba(247,251,255,.32);
+    }
+
+    input:focus {
+      border-color: rgba(76,216,255,.70);
+      box-shadow: 0 0 0 4px rgba(76,216,255,.105);
+    }
+
+    .pass-wrap {
+      position: relative;
+    }
+
+    .pass-wrap input {
+      padding-right: 88px;
+    }
+
+    .show-pass {
+      position: absolute;
+      right: 8px;
+      bottom: 8px;
+      height: 37px;
+      padding: 0 12px;
+      border-radius: 13px;
+      background: rgba(255,255,255,.085);
+      border: 1px solid rgba(255,255,255,.11);
+      color: rgba(247,251,255,.76);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .primary {
+      width: 100%;
+      padding: 16px 18px;
+      border-radius: 17px;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      color: #fff;
+      font-weight: 950;
+      box-shadow: 0 18px 42px rgba(44,141,255,.30);
+      transition: transform .18s ease, opacity .18s ease, filter .18s ease;
+    }
+
+    .primary:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.05);
+    }
+
+    .primary:disabled {
+      cursor: not-allowed;
+      opacity: .55;
+      transform: none;
+      filter: grayscale(.2);
+    }
+
+    .ghost {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.075);
+      border: 1px solid rgba(255,255,255,.12);
+      color: rgba(247,251,255,.86);
+      font-weight: 900;
+    }
+
+    .error {
+      display: none;
+      margin-bottom: 13px;
+      padding: 12px;
+      border-radius: 15px;
+      background: rgba(255,91,117,.10);
+      border: 1px solid rgba(255,91,117,.24);
+      color: #ffb7c3;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .error.show {
+      display: block;
+    }
+
+    .tiny {
+      margin: 14px 0 0;
+      color: var(--muted2);
+      font-size: 11px;
+      line-height: 1.45;
+      text-align: center;
+    }
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-top: 4px;
+    }
+
+    .top-title {
+      min-width: 0;
+    }
+
+    .top-title strong {
+      display: block;
+      font-size: 18px;
+      letter-spacing: -.035em;
+    }
+
+    .top-title span {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 12px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      max-width: 250px;
+    }
+
+    .exit {
+      flex: 0 0 auto;
+      width: 42px;
+      height: 42px;
+      border-radius: 15px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      color: rgba(247,251,255,.84);
+      font-weight: 950;
+    }
+
+    .account-card {
+      padding: 18px;
+      margin-bottom: 13px;
+    }
+
+    .account-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+
+    .avatar {
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      border-radius: 17px;
+      background: rgba(76,216,255,.13);
+      border: 1px solid rgba(76,216,255,.22);
+      font-size: 21px;
+    }
+
+    .account-head strong {
+      display: block;
+      font-size: 17px;
+      letter-spacing: -.035em;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      max-width: 250px;
+    }
+
+    .account-head span {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+    }
+
+    .info {
+      padding: 12px;
+      border-radius: 16px;
+      background: rgba(0,0,0,.16);
+      border: 1px solid rgba(255,255,255,.095);
+      min-width: 0;
+    }
+
+    .info span {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--muted2);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      font-weight: 900;
+    }
+
+    .info strong {
+      display: block;
+      color: var(--text);
+      font-size: 13px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .status-ok { color: #9dffd0 !important; }
+    .status-warn { color: #ffe7a8 !important; }
+    .status-bad { color: #ffb6c1 !important; }
+
+    .renew-card {
+      padding: 18px;
+      flex: 1;
+    }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+      margin-bottom: 13px;
+    }
+
+    .section-title h2 {
+      margin: 0;
+      font-size: 20px;
+      letter-spacing: -.045em;
+    }
+
+    .section-title p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.42;
+    }
+
+    .pay-ok {
+      flex: 0 0 auto;
+      padding: 7px 9px;
+      border-radius: 999px;
+      background: rgba(63,229,159,.12);
+      border: 1px solid rgba(63,229,159,.20);
+      color: #9dffd0;
+      font-size: 10px;
+      font-weight: 950;
+      white-space: nowrap;
+    }
+
+    .plans {
+      display: grid;
+      gap: 10px;
+    }
+
+    .plan {
+      width: 100%;
+      text-align: left;
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.075);
+      border: 1px solid rgba(255,255,255,.12);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      transition: border-color .18s ease, background .18s ease, transform .18s ease;
+    }
+
+    .plan:active {
+      transform: scale(.99);
+    }
+
+    .plan.active {
+      border-color: rgba(76,216,255,.70);
+      background:
+        linear-gradient(135deg, rgba(44,141,255,.25), rgba(76,216,255,.08)),
+        rgba(255,255,255,.08);
+    }
+
+    .plan b {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .plan span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
+    .plan strong {
+      font-size: 17px;
+      letter-spacing: -.04em;
+      white-space: nowrap;
+    }
+
+    .summary {
+      margin-top: 13px;
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(0,0,0,.17);
+      border: 1px solid rgba(255,255,255,.10);
+      display: grid;
+      gap: 9px;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .row strong {
+      color: var(--text);
+      text-align: right;
+    }
+
+    .total {
+      margin-top: 2px;
+      padding-top: 11px;
+      border-top: 1px dashed rgba(255,255,255,.18);
+      font-size: 14px;
+    }
+
+    .total strong {
+      font-size: 22px;
+      letter-spacing: -.05em;
+    }
+
+    .actions {
+      display: grid;
+      gap: 10px;
+      margin-top: 13px;
+    }
+
+    .blocked-card {
+      display: none;
+      text-align: center;
+      padding: 22px 18px;
+    }
+
+    .blocked-card.show {
+      display: block;
+    }
+
+    .blocked-icon {
+      width: 58px;
+      height: 58px;
+      margin: 0 auto 14px;
+      display: grid;
+      place-items: center;
+      border-radius: 21px;
+      background: rgba(255,215,111,.12);
+      border: 1px solid rgba(255,215,111,.22);
+      font-size: 25px;
+    }
+
+    .blocked-card h2 {
+      margin: 0 0 8px;
+      font-size: 21px;
+      letter-spacing: -.045em;
+    }
+
+    .blocked-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    dialog {
+      width: min(394px, calc(100% - 24px));
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      padding: 0;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.13), rgba(255,255,255,.07)),
+        #0b1c39;
+      color: var(--text);
+      box-shadow: var(--shadow);
+    }
+
+    dialog::backdrop {
+      background: rgba(0,0,0,.64);
+      backdrop-filter: blur(5px);
+    }
+
+    .modal {
+      padding: 20px;
+    }
+
+    .modal h3 {
+      margin: 0 0 7px;
+      font-size: 22px;
+      letter-spacing: -.045em;
+    }
+
+    .modal p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .qr {
+      width: 164px;
+      height: 164px;
+      margin: 17px auto;
+      border-radius: 22px;
+      border: 10px solid #fff;
+      background:
+        linear-gradient(90deg, #071226 50%, transparent 0) 0 0 / 22px 22px,
+        linear-gradient(#071226 50%, transparent 0) 0 0 / 22px 22px,
+        #fff;
+    }
+
+    .copy-wrap {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .copy-wrap input {
+      font-size: 11px;
+      color: rgba(247,251,255,.72);
+    }
+
+    .small {
+      padding: 0 13px;
+      border-radius: 14px;
+      background: rgba(76,216,255,.12);
+      border: 1px solid rgba(76,216,255,.20);
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 950;
+    }
+
+    .modal-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+      margin-top: 13px;
+    }
+
+    .paid {
+      display: none;
+      text-align: center;
+      padding: 18px 0 4px;
+    }
+
+    .check {
+      width: 66px;
+      height: 66px;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 14px;
+      border-radius: 24px;
+      background: rgba(63,229,159,.13);
+      border: 1px solid rgba(63,229,159,.22);
+      color: #9dffd0;
+      font-size: 31px;
+      font-weight: 950;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: max(18px, env(safe-area-inset-bottom));
+      width: min(390px, calc(100% - 24px));
+      padding: 13px 14px;
+      border-radius: 17px;
+      background: rgba(2,8,20,.92);
+      border: 1px solid rgba(255,255,255,.14);
+      color: #fff;
+      box-shadow: 0 16px 44px rgba(0,0,0,.36);
+      transform: translateX(-50%) translateY(120px);
+      transition: transform .22s ease;
+      z-index: 30;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .spinner {
+      width: 17px;
+      height: 17px;
+      display: inline-block;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,.34);
+      border-top-color: #fff;
+      margin-right: 8px;
+      vertical-align: -3px;
+      animation: spin .8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    [hidden] { display: none !important; }
+
+    @media (min-width: 700px) {
+      body {
+        display: grid;
+        place-items: center;
+      }
+
+      .app {
+        min-height: 780px;
+        max-height: 920px;
+      }
+    }
+
+    .month-label{
+      margin:4px 0 9px;
+      color:var(--muted2);
+      font-size:10px;
+      text-transform:uppercase;
+      letter-spacing:.09em;
+      font-weight:950;
+    }
+
+    .month-selector{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:9px;
+      margin-bottom:12px;
+    }
+
+    .month-option{
+      min-height:72px;
+      padding:12px 8px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.065);
+      color:var(--text);
+      display:grid;
+      place-items:center;
+      text-align:center;
+      transition:transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease;
+    }
+
+    .month-option:active{
+      transform:scale(.98);
+    }
+
+    .month-option.active{
+      border-color:rgba(76,216,255,.72);
+      background:linear-gradient(135deg, rgba(44,141,255,.28), rgba(76,216,255,.10));
+      box-shadow:0 14px 30px rgba(44,141,255,.18);
+    }
+
+    .month-option b{
+      display:block;
+      font-size:22px;
+      line-height:1;
+      letter-spacing:-.06em;
+    }
+
+    .month-option span{
+      display:block;
+      margin-top:5px;
+      font-size:11px;
+      color:var(--muted);
+      font-weight:850;
+    }
+
+    .selected-plan-card{
+      padding:14px;
+      border-radius:19px;
+      background:rgba(0,0,0,.17);
+      border:1px solid rgba(255,255,255,.10);
+      margin-bottom:11px;
+    }
+
+    .selected-plan-card div{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:7px;
+    }
+
+    .selected-plan-card span{
+      color:var(--muted);
+      font-size:12px;
+      font-weight:850;
+    }
+
+    .selected-plan-card strong{
+      font-size:22px;
+      line-height:1;
+      letter-spacing:-.05em;
+      text-align:right;
+      white-space:nowrap;
+    }
+
+    .selected-plan-card small{
+      display:block;
+      color:var(--muted2);
+      font-size:11px;
+      line-height:1.42;
+    }
+
+    .validity-preview{
+      display:grid;
+      grid-template-columns:1fr auto 1fr;
+      align-items:center;
+      gap:9px;
+      padding:12px;
+      border-radius:18px;
+      background:rgba(63,229,159,.075);
+      border:1px solid rgba(63,229,159,.15);
+      margin-bottom:12px;
+    }
+
+    .validity-preview div:not(.arrow){
+      min-width:0;
+    }
+
+    .validity-preview span{
+      display:block;
+      margin-bottom:5px;
+      color:var(--muted2);
+      font-size:10px;
+      text-transform:uppercase;
+      letter-spacing:.07em;
+      font-weight:950;
+    }
+
+    .validity-preview strong{
+      display:block;
+      font-size:12px;
+      color:#9dffd0;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .validity-preview .arrow{
+      width:28px;
+      height:28px;
+      display:grid;
+      place-items:center;
+      border-radius:999px;
+      background:rgba(255,255,255,.08);
+      color:var(--muted);
+      font-weight:950;
+    }
+
+    .payment-modal{
+      padding:18px;
+    }
+
+    .payment-top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:14px;
+    }
+
+    .payment-status{
+      display:inline-flex;
+      width:fit-content;
+      margin-bottom:9px;
+      padding:7px 10px;
+      border-radius:999px;
+      background:rgba(255,215,111,.12);
+      border:1px solid rgba(255,215,111,.20);
+      color:#ffe7a8;
+      font-size:10px;
+      font-weight:950;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+    }
+
+    .modal-close{
+      flex:0 0 auto;
+      width:38px;
+      height:38px;
+      border-radius:14px;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);
+      color:var(--text);
+      font-size:22px;
+      line-height:1;
+    }
+
+    .payment-card{
+      display:grid;
+      gap:9px;
+      padding:13px;
+      border-radius:18px;
+      background:rgba(0,0,0,.17);
+      border:1px solid rgba(255,255,255,.10);
+      margin-bottom:13px;
+    }
+
+    .payment-row{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .payment-row strong{
+      color:var(--text);
+      text-align:right;
+    }
+
+    .payment-code-area{
+      margin-top:2px;
+    }
+
+    .auto-check{
+      display:flex;
+      align-items:center;
+      gap:11px;
+      margin-top:13px;
+      padding:12px;
+      border-radius:18px;
+      background:rgba(44,141,255,.095);
+      border:1px solid rgba(76,216,255,.16);
+    }
+
+    .auto-check strong{
+      display:block;
+      font-size:12px;
+      margin-bottom:3px;
+    }
+
+    .auto-check span{
+      display:block;
+      color:var(--muted);
+      font-size:11px;
+      line-height:1.35;
+    }
+
+    .auto-spinner{
+      width:28px;
+      height:28px;
+      border-radius:999px;
+      border:3px solid rgba(255,255,255,.18);
+      border-top-color:var(--cyan);
+      animation:spin .8s linear infinite;
+      flex:0 0 auto;
+    }
+
+    .success-paid{
+      padding:12px 0 4px;
+    }
+
+    .success-paid p{
+      max-width:280px;
+      margin-left:auto;
+      margin-right:auto;
+    }
+
+    .success-validity{
+      margin:16px 0;
+      padding:14px;
+      border-radius:18px;
+      background:rgba(63,229,159,.10);
+      border:1px solid rgba(63,229,159,.18);
+      text-align:left;
+    }
+
+    .success-validity span{
+      display:block;
+      color:var(--muted);
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.07em;
+      font-weight:950;
+      margin-bottom:6px;
+    }
+
+    .success-validity strong{
+      display:block;
+      color:#9dffd0;
+      font-size:22px;
+      letter-spacing:-.04em;
+    }
+
+    @media (max-width:360px){
+      .month-selector{
+        grid-template-columns:1fr;
+      }
+      .month-option{
+        min-height:58px;
+        grid-template-columns:auto 1fr;
+        justify-content:start;
+        padding:12px 14px;
+      }
+    }
+
+
+    .clean-renew-card{padding:18px;border-radius:24px}
+    .clean-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:16px}
+    .clean-head h2{margin:0;font-size:22px;line-height:1.05;letter-spacing:-.05em}
+    .clean-head p{margin:6px 0 0;color:var(--muted);font-size:12px;line-height:1.38}
+    .clean-pay-ok{padding:7px 10px;font-size:10px}
+    .period-tabs{display:flex;gap:8px;padding:5px;border-radius:20px;background:rgba(0,0,0,.14);border:1px solid rgba(255,255,255,.09);margin-bottom:13px}
+    .period-tab{flex:1;min-width:0;padding:12px 7px;border-radius:16px;background:transparent;border:1px solid transparent;color:var(--muted);text-align:center;transition:background .18s ease,border-color .18s ease,color .18s ease,transform .18s ease}
+    .period-tab:active{transform:scale(.98)}
+    .period-tab.active{background:linear-gradient(135deg, rgba(44,141,255,.24), rgba(76,216,255,.10));border-color:rgba(76,216,255,.55);color:var(--text)}
+    .period-tab b{display:block;font-size:18px;line-height:1;letter-spacing:-.05em}
+    .period-tab span{display:block;margin-top:4px;font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;opacity:.78}
+    .clean-summary{padding:15px;border-radius:21px;background:rgba(0,0,0,.16);border:1px solid rgba(255,255,255,.10)}
+    .clean-plan-line{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-bottom:13px;border-bottom:1px dashed rgba(255,255,255,.14)}
+    .clean-plan-line span,.validity-line span,.clean-meta span{display:block;color:var(--muted2);font-size:10px;text-transform:uppercase;letter-spacing:.08em;font-weight:950;margin-bottom:5px}
+    .clean-plan-line div strong{display:block;font-size:14px;line-height:1.2}
+    .clean-plan-line>strong{font-size:24px;line-height:1;letter-spacing:-.06em;white-space:nowrap;text-align:right}
+    .validity-line{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;padding:13px 0;border-bottom:1px dashed rgba(255,255,255,.14)}
+    .validity-line strong{display:block;color:#9dffd0;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .validity-divider{width:28px;height:28px;display:grid;place-items:center;border-radius:999px;background:rgba(255,255,255,.08);color:var(--muted);font-weight:950}
+    .clean-meta{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:12px;color:var(--muted);font-size:12px}
+    .clean-meta span{margin:0}
+    .clean-meta strong{color:var(--text);text-align:right;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+    .clean-pay-btn{margin-top:13px}
+    .selected-plan-card,.validity-preview,.month-label,.month-selector{display:none!important}
+
+    .clean-payment-modal{padding:18px}
+    .checkout-head{position:relative;padding-right:46px;margin-bottom:14px}
+    .checkout-head h3{margin:10px 0 7px;font-size:24px;line-height:1.08;letter-spacing:-.05em}
+    .checkout-head p{font-size:12px;line-height:1.5;color:var(--muted)}
+    .checkout-status{display:inline-flex;width:fit-content;padding:7px 10px;border-radius:999px;background:rgba(255,215,111,.12);border:1px solid rgba(255,215,111,.20);color:#ffe7a8;font-size:10px;font-weight:950;text-transform:uppercase;letter-spacing:.05em}
+    .modal-close{position:absolute;top:0;right:0;width:38px;height:38px;border-radius:14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:var(--text);font-size:22px;line-height:1}
+    .checkout-summary{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+    .checkout-summary div{padding:12px;border-radius:17px;background:rgba(0,0,0,.15);border:1px solid rgba(255,255,255,.09)}
+    .checkout-summary span{display:block;color:var(--muted2);font-size:10px;text-transform:uppercase;letter-spacing:.08em;font-weight:950;margin-bottom:5px}
+    .checkout-summary strong{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .checkout-link-box{padding:13px;border-radius:19px;background:rgba(0,0,0,.15);border:1px solid rgba(255,255,255,.09);margin-top:12px}
+    .checkout-link-box>span{display:block;color:var(--muted2);font-size:10px;text-transform:uppercase;letter-spacing:.08em;font-weight:950;margin-bottom:8px}
+    .checkout-link-box input{height:44px;font-size:11px;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .checkout-actions{display:grid;grid-template-columns:1fr auto;gap:9px}
+    .compact-btn{padding:13px 14px;min-height:48px}
+    .auto-status{display:flex;align-items:center;gap:11px;margin:12px 0 10px;padding:12px;border-radius:18px;background:rgba(44,141,255,.095);border:1px solid rgba(76,216,255,.16)}
+    .pulse{width:28px;height:28px;border-radius:999px;background:rgba(76,216,255,.12);border:1px solid rgba(76,216,255,.24);position:relative;flex:0 0 auto}
+    .pulse::after{content:"";position:absolute;inset:7px;border-radius:999px;background:var(--cyan);animation:pulseDot 1.2s ease-in-out infinite}
+    @keyframes pulseDot{0%,100%{transform:scale(.7);opacity:.45}50%{transform:scale(1);opacity:1}}
+    .auto-status strong{display:block;font-size:12px;margin-bottom:3px}
+    .auto-status small{display:block;color:var(--muted);font-size:11px;line-height:1.3}
+    .clean-qr{margin:12px auto}
+    .clean-success{padding:14px 0 4px}
+    .clean-success-validity{margin:16px 0}
+    @media (max-width:360px){
+      .period-tabs{gap:5px}
+      .period-tab{padding:10px 5px}
+      .checkout-actions,.checkout-summary{grid-template-columns:1fr}
+    }
+
+
+    #checkPayBtn[hidden]{
+      display:none!important;
+    }
+
+
+    .account-card-v14{
+      padding:16px;
+      border-radius:26px;
+      margin-bottom:14px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.11), rgba(255,255,255,.055)),
+        rgba(16,29,55,.80);
+    }
+
+    .account-top-v14{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-bottom:14px;
+    }
+
+    .avatar-v14{
+      width:48px;
+      height:48px;
+      border-radius:18px;
+      margin:0;
+      flex:0 0 auto;
+    }
+
+    .account-main-v14{
+      min-width:0;
+      flex:1;
+    }
+
+    .account-main-v14 strong{
+      display:block;
+      font-size:20px;
+      line-height:1.1;
+      letter-spacing:-.045em;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .account-main-v14 span{
+      display:block;
+      margin-top:4px;
+      color:var(--muted);
+      font-size:12px;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .account-strip-v14{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .account-strip-v14 div{
+      padding:12px;
+      border-radius:18px;
+      background:rgba(0,0,0,.13);
+      border:1px solid rgba(255,255,255,.09);
+      min-width:0;
+    }
+
+    .account-strip-v14 span,
+    .price-card-v14 span,
+    .validity-card-v14 span,
+    .account-mini-v14 span{
+      display:block;
+      margin-bottom:6px;
+      color:var(--muted2);
+      font-size:10px;
+      font-weight:950;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+
+    .account-strip-v14 strong{
+      display:block;
+      font-size:14px;
+      line-height:1.2;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .renew-card-v14{
+      padding:17px;
+      border-radius:26px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.050)),
+        rgba(16,29,55,.82);
+    }
+
+    .renew-head-v14{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:14px;
+    }
+
+    .renew-head-v14 h2{
+      margin:0;
+      font-size:23px;
+      line-height:1.05;
+      letter-spacing:-.055em;
+    }
+
+    .renew-head-v14 p{
+      margin:6px 0 0;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.4;
+    }
+
+    .pay-ok-v14{
+      padding:7px 10px;
+      border-radius:999px;
+      font-size:10px;
+      white-space:nowrap;
+    }
+
+    .period-tabs-v14{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:8px;
+      margin-bottom:12px;
+    }
+
+    .period-tab-v14{
+      min-height:58px;
+      padding:11px 6px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(0,0,0,.11);
+      color:var(--muted);
+      text-align:center;
+      transition:background .18s ease, border-color .18s ease, transform .18s ease, color .18s ease, box-shadow .18s ease;
+    }
+
+    .period-tab-v14:active{
+      transform:scale(.98);
+    }
+
+    .period-tab-v14.active{
+      color:var(--text);
+      border-color:rgba(76,216,255,.65);
+      background:
+        linear-gradient(135deg, rgba(44,141,255,.24), rgba(76,216,255,.10)),
+        rgba(0,0,0,.10);
+      box-shadow:0 14px 28px rgba(44,141,255,.16);
+    }
+
+    .period-tab-v14 b{
+      display:block;
+      font-size:22px;
+      line-height:1;
+      letter-spacing:-.06em;
+    }
+
+    .period-tab-v14 span{
+      display:block;
+      margin-top:5px;
+      font-size:10px;
+      font-weight:950;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      opacity:.76;
+    }
+
+    .price-card-v14{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      padding:15px;
+      border-radius:21px;
+      background:rgba(0,0,0,.14);
+      border:1px solid rgba(255,255,255,.09);
+      margin-bottom:10px;
+    }
+
+    .price-card-v14 div{
+      min-width:0;
+    }
+
+    .price-card-v14 div strong{
+      display:block;
+      font-size:15px;
+      line-height:1.25;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .price-card-v14 > strong{
+      font-size:25px;
+      line-height:1;
+      letter-spacing:-.06em;
+      white-space:nowrap;
+    }
+
+    .validity-card-v14{
+      display:grid;
+      grid-template-columns:1fr auto 1fr;
+      align-items:center;
+      gap:9px;
+      padding:13px;
+      border-radius:21px;
+      background:rgba(63,229,159,.075);
+      border:1px solid rgba(63,229,159,.15);
+      margin-bottom:10px;
+    }
+
+    .validity-card-v14 strong{
+      display:block;
+      color:#9dffd0;
+      font-size:13px;
+      line-height:1.2;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .validity-arrow-v14{
+      width:28px;
+      height:28px;
+      display:grid;
+      place-items:center;
+      border-radius:999px;
+      background:rgba(255,255,255,.09);
+      color:var(--muted);
+      font-weight:950;
+    }
+
+    .account-mini-v14{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:12px 14px;
+      border-radius:18px;
+      background:rgba(0,0,0,.12);
+      border:1px solid rgba(255,255,255,.08);
+      margin-bottom:12px;
+    }
+
+    .account-mini-v14 span{
+      margin:0;
+    }
+
+    .account-mini-v14 strong{
+      display:block;
+      text-align:right;
+      overflow:hidden;
+      white-space:nowrap;
+      text-overflow:ellipsis;
+      max-width:65%;
+      font-size:13px;
+    }
+
+    .clean-pay-btn{
+      margin-top:0;
+    }
+
+    .account-card .info-grid,
+    .stats,
+    .clean-summary,
+    .period-tabs,
+    .month-selector,
+    .selected-plan-card,
+    .validity-preview{
+      display:none!important;
+    }
+
+    @media (max-width:360px){
+      .period-tabs-v14{
+        gap:6px;
+      }
+      .period-tab-v14{
+        min-height:54px;
+        padding:10px 5px;
+      }
+      .price-card-v14 > strong{
+        font-size:22px;
+      }
+    }
+
+
+    .account-mini-v14{
+      display:none!important;
+    }
+
+
+    .renew-card-v14{
+      flex:0 0 auto!important;
+      padding:16px!important;
+      margin-bottom:14px!important;
+    }
+
+    .renew-head-v14{
+      margin-bottom:12px!important;
+    }
+
+    .renew-head-v14 h2{
+      font-size:22px!important;
+    }
+
+    .renew-head-v14 p{
+      margin-top:5px!important;
+    }
+
+    .period-tabs-v14{
+      margin-bottom:10px!important;
+      gap:7px!important;
+    }
+
+    .period-tab-v14{
+      min-height:52px!important;
+      padding:9px 6px!important;
+      border-radius:17px!important;
+    }
+
+    .period-tab-v14 b{
+      font-size:20px!important;
+    }
+
+    .period-tab-v14 span{
+      margin-top:4px!important;
+      font-size:9px!important;
+    }
+
+    .price-card-v14{
+      padding:13px!important;
+      margin-bottom:9px!important;
+      border-radius:19px!important;
+    }
+
+    .price-card-v14 > strong{
+      font-size:23px!important;
+    }
+
+    .validity-card-v14{
+      padding:12px!important;
+      margin-bottom:12px!important;
+      border-radius:19px!important;
+    }
+
+    .validity-card-v14 strong{
+      font-size:12px!important;
+    }
+
+    .clean-pay-btn{
+      margin-top:0!important;
+      padding:15px 16px!important;
+      border-radius:18px!important;
+    }
+
+    .clean-summary,
+    .account-mini-v14{
+      display:none!important;
+    }
+
+    .renew-screen-spacer,
+    .actions{
+      display:none!important;
+    }
+
+    @media (max-width:430px){
+      .renew-card-v14{
+        padding:15px!important;
+      }
+
+      .period-tab-v14{
+        min-height:50px!important;
+      }
+
+      .price-card-v14{
+        align-items:center!important;
+      }
+
+      .price-card-v14 div strong{
+        font-size:14px!important;
+      }
+
+      .price-card-v14 > strong{
+        font-size:22px!important;
+      }
+    }
+
+
+    .login-screen{
+      justify-content:center!important;
+      padding:8px 0;
+    }
+
+    .login-v18{
+      width:100%;
+      min-height:calc(100svh - 36px);
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      position:relative;
+    }
+
+    .login-v18::before{
+      content:"";
+      position:absolute;
+      width:280px;
+      height:280px;
+      left:50%;
+      top:5%;
+      transform:translateX(-50%);
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(76,216,255,.26), transparent 68%);
+      filter:blur(4px);
+      pointer-events:none;
+    }
+
+    .login-orbit{
+      width:104px;
+      height:104px;
+      margin:0 auto 18px;
+      position:relative;
+      display:grid;
+      place-items:center;
+    }
+
+    .login-orbit::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:34px;
+      background:linear-gradient(135deg, rgba(44,141,255,.18), rgba(76,216,255,.08));
+      border:1px solid rgba(76,216,255,.20);
+      transform:rotate(8deg);
+      box-shadow:0 22px 54px rgba(44,141,255,.22);
+    }
+
+    .login-logo-v18{
+      position:relative;
+      z-index:1;
+      width:72px;
+      height:72px;
+      display:grid;
+      place-items:center;
+      border-radius:26px;
+      background:linear-gradient(135deg, var(--blue), var(--cyan));
+      box-shadow:0 18px 44px rgba(44,141,255,.34);
+      color:#fff;
+      font-size:31px;
+      font-weight:950;
+      letter-spacing:-.08em;
+    }
+
+    .orbit-dot{
+      position:absolute;
+      z-index:2;
+      width:13px;
+      height:13px;
+      border-radius:999px;
+      background:var(--cyan);
+      box-shadow:0 0 0 6px rgba(76,216,255,.12);
+    }
+
+    .dot-a{
+      right:8px;
+      top:18px;
+    }
+
+    .dot-b{
+      left:10px;
+      bottom:16px;
+      width:10px;
+      height:10px;
+      background:var(--green);
+      box-shadow:0 0 0 6px rgba(63,229,159,.10);
+    }
+
+    .login-copy-v18{
+      text-align:center;
+      margin-bottom:18px;
+      position:relative;
+      z-index:1;
+    }
+
+    .login-copy-v18 span{
+      display:inline-flex;
+      width:fit-content;
+      padding:7px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.07);
+      border:1px solid rgba(255,255,255,.12);
+      color:var(--muted);
+      font-size:11px;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      margin-bottom:12px;
+    }
+
+    .login-copy-v18 h1{
+      margin:0;
+      font-size:34px;
+      line-height:1;
+      letter-spacing:-.07em;
+    }
+
+    .login-copy-v18 p{
+      margin:9px auto 0;
+      max-width:290px;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.45;
+    }
+
+    .login-card-v18{
+      position:relative;
+      z-index:1;
+      padding:18px!important;
+      border-radius:28px!important;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.060)),
+        rgba(16,29,55,.86)!important;
+      border-color:rgba(255,255,255,.14)!important;
+      box-shadow:0 28px 70px rgba(0,0,0,.38)!important;
+    }
+
+    .login-card-v18::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      border-radius:28px;
+      background:linear-gradient(135deg, rgba(76,216,255,.12), transparent 38%, rgba(44,141,255,.10));
+      opacity:.78;
+    }
+
+    .login-card-v18 > *{
+      position:relative;
+      z-index:1;
+    }
+
+    .login-card-top-v18{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:15px;
+      padding-bottom:14px;
+      border-bottom:1px solid rgba(255,255,255,.10);
+    }
+
+    .login-card-top-v18 strong{
+      display:block;
+      font-size:18px;
+      letter-spacing:-.035em;
+      line-height:1.1;
+    }
+
+    .login-card-top-v18 span{
+      display:block;
+      margin-top:4px;
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .lock-v18{
+      width:44px;
+      height:44px;
+      display:grid;
+      place-items:center;
+      border-radius:16px;
+      background:rgba(76,216,255,.12);
+      border:1px solid rgba(76,216,255,.18);
+      flex:0 0 auto;
+    }
+
+    .login-form-v18{
+      gap:12px!important;
+    }
+
+    .login-label-v18{
+      color:rgba(247,251,255,.82)!important;
+      font-size:11px!important;
+      text-transform:uppercase;
+      letter-spacing:.07em;
+      gap:7px!important;
+    }
+
+    .input-v18{
+      position:relative;
+    }
+
+    .input-v18 input{
+      height:56px;
+      border-radius:18px!important;
+      padding-left:46px!important;
+      background:rgba(0,0,0,.19)!important;
+      border-color:rgba(255,255,255,.13)!important;
+    }
+
+    .input-v18 input:focus{
+      background:rgba(0,0,0,.25)!important;
+      border-color:rgba(76,216,255,.62)!important;
+    }
+
+    .input-icon-v18{
+      position:absolute;
+      left:15px;
+      top:50%;
+      transform:translateY(-50%);
+      z-index:2;
+      font-size:15px;
+      opacity:.76;
+      pointer-events:none;
+    }
+
+    .input-v18.pass-wrap input{
+      padding-right:94px!important;
+    }
+
+    .show-pass-v18{
+      right:8px!important;
+      bottom:9px!important;
+      height:38px!important;
+      padding:0 12px!important;
+      border-radius:14px!important;
+      font-size:11px!important;
+      background:rgba(255,255,255,.09)!important;
+    }
+
+    .login-btn-v18{
+      margin-top:3px;
+      height:58px;
+      border-radius:19px!important;
+      font-size:16px;
+    }
+
+    .login-footer-v18{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      margin-top:14px;
+      padding:11px 12px;
+      border-radius:17px;
+      background:rgba(0,0,0,.12);
+      border:1px solid rgba(255,255,255,.08);
+      color:var(--muted);
+      font-size:11px;
+      line-height:1.35;
+      text-align:center;
+    }
+
+    .cache-dot-v18{
+      width:8px;
+      height:8px;
+      border-radius:999px;
+      background:var(--green);
+      box-shadow:0 0 0 5px rgba(63,229,159,.10);
+      flex:0 0 auto;
+    }
+
+    .login-bottom-v18{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      margin-top:15px;
+      color:var(--muted2);
+      font-size:11px;
+      position:relative;
+      z-index:1;
+    }
+
+    .brand,
+    .tiny{
+      display:none!important;
+    }
+
+    @media (max-height:720px){
+      .login-orbit{
+        width:86px;
+        height:86px;
+        margin-bottom:12px;
+      }
+
+      .login-logo-v18{
+        width:62px;
+        height:62px;
+        border-radius:22px;
+      }
+
+      .login-copy-v18 h1{
+        font-size:30px;
+      }
+
+      .login-card-v18{
+        padding:16px!important;
+      }
+
+      .input-v18 input{
+        height:52px;
+      }
+
+      .login-btn-v18{
+        height:54px;
+      }
+    }
+
+    @media (max-width:360px){
+      .login-copy-v18 h1{
+        font-size:31px;
+      }
+
+      .login-card-top-v18 strong{
+        font-size:17px;
+      }
+    }
+
+
+    :root{
+      --muted:rgba(248,251,255,.78);
+      --muted2:rgba(248,251,255,.62);
+      --muted-2:rgba(248,251,255,.62);
+    }
+
+    .login-copy-v18 p,
+    .login-card-top-v18 span,
+    .login-bottom-v18,
+    .account-main-v14 span,
+    .renew-head-v14 p,
+    .checkout-head p,
+    .auto-status small,
+    .modal p,
+    .brand-copy span,
+    .top-title span,
+    .helper-card{
+      color:rgba(248,251,255,.78)!important;
+    }
+
+    .login-copy-v18 span,
+    .login-label-v18,
+    .account-strip-v14 span,
+    .price-card-v14 span,
+    .validity-card-v14 span,
+    .checkout-summary span,
+    .checkout-link-box > span,
+    .clean-plan-line span,
+    .validity-line span,
+    .clean-meta span{
+      color:rgba(248,251,255,.68)!important;
+    }
+
+    input::placeholder{
+      color:rgba(248,251,255,.52)!important;
+    }
+
+    .login-card-top-v18{
+      margin-bottom:16px!important;
+    }
+
+    .login-btn-v18{
+      margin-top:6px!important;
+    }
+
+    .login-bottom-v18{
+      margin-top:18px!important;
+    }
+
+
+    /* Login v20 - clean */
+    .login-screen{
+      justify-content:center!important;
+      padding:10px 0!important;
+    }
+
+    .login-clean-v20{
+      width:100%;
+      min-height:calc(100svh - 36px);
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      position:relative;
+    }
+
+    .login-clean-v20::before{
+      content:"";
+      position:absolute;
+      top:4%;
+      left:50%;
+      width:260px;
+      height:260px;
+      transform:translateX(-50%);
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(72,168,255,.24), transparent 68%);
+      filter:blur(8px);
+      pointer-events:none;
+    }
+
+    .login-brand-v20{
+      position:relative;
+      z-index:1;
+      text-align:center;
+      margin-bottom:24px;
+    }
+
+    .logo-v20{
+      width:64px;
+      height:64px;
+      margin:0 auto 14px;
+      display:grid;
+      place-items:center;
+      border-radius:22px;
+      background:linear-gradient(135deg,#2f91ff,#4fd7ff);
+      color:#fff;
+      font-size:28px;
+      font-weight:950;
+      letter-spacing:-.08em;
+      box-shadow:0 18px 42px rgba(47,145,255,.34);
+    }
+
+    .login-brand-v20 strong{
+      display:block;
+      font-size:21px;
+      line-height:1;
+      letter-spacing:.05em;
+      color:#ffffff;
+    }
+
+    .login-brand-v20 span{
+      display:block;
+      margin-top:7px;
+      font-size:13px;
+      color:rgba(248,251,255,.72);
+    }
+
+    .login-card-v20{
+      position:relative;
+      z-index:1;
+      padding:22px;
+      border-radius:30px;
+      background:rgba(14,27,52,.78);
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:0 28px 70px rgba(0,0,0,.36);
+      backdrop-filter:blur(18px);
+      -webkit-backdrop-filter:blur(18px);
+    }
+
+    .login-card-v20::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:30px;
+      pointer-events:none;
+      background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.025));
+    }
+
+    .login-card-v20 > *{
+      position:relative;
+      z-index:1;
+    }
+
+    .login-title-v20{
+      margin-bottom:18px;
+      text-align:left;
+    }
+
+    .login-title-v20 h1{
+      margin:0;
+      font-size:30px;
+      line-height:1;
+      letter-spacing:-.065em;
+      color:#ffffff;
+    }
+
+    .login-title-v20 p{
+      margin:8px 0 0;
+      color:rgba(248,251,255,.72);
+      font-size:13px;
+      line-height:1.45;
+    }
+
+    .form-v20{
+      display:grid;
+      gap:14px;
+    }
+
+    .form-v20 label{
+      display:grid;
+      gap:8px;
+      color:rgba(248,251,255,.76)!important;
+      font-size:12px!important;
+      font-weight:850;
+      text-transform:none!important;
+      letter-spacing:0!important;
+    }
+
+    .form-v20 input{
+      height:56px;
+      width:100%;
+      border-radius:18px!important;
+      border:1px solid rgba(255,255,255,.12)!important;
+      background:rgba(5,12,25,.54)!important;
+      color:#ffffff!important;
+      padding:0 15px!important;
+      font-size:14px;
+      outline:none;
+      transition:border-color .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+
+    .form-v20 input::placeholder{
+      color:rgba(248,251,255,.45)!important;
+    }
+
+    .form-v20 input:focus{
+      background:rgba(5,12,25,.66)!important;
+      border-color:rgba(79,215,255,.70)!important;
+      box-shadow:0 0 0 4px rgba(79,215,255,.10)!important;
+    }
+
+    .password-v20{
+      position:relative;
+    }
+
+    .password-v20 input{
+      padding-right:82px!important;
+    }
+
+    .show-pass-v20{
+      position:absolute;
+      right:8px;
+      top:50%;
+      transform:translateY(-50%);
+      height:40px;
+      min-width:58px;
+      padding:0 12px;
+      border-radius:14px;
+      background:rgba(255,255,255,.07);
+      border:1px solid rgba(255,255,255,.10);
+      color:rgba(248,251,255,.82);
+      font-size:12px;
+      font-weight:900;
+    }
+
+    .login-btn-v20{
+      height:58px!important;
+      margin-top:4px!important;
+      border-radius:19px!important;
+      font-size:16px!important;
+      background:linear-gradient(135deg,#2f91ff,#4fd7ff)!important;
+      box-shadow:0 18px 42px rgba(47,145,255,.28)!important;
+    }
+
+    .login-note-v20{
+      position:relative;
+      z-index:1;
+      margin-top:16px;
+      text-align:center;
+      color:rgba(248,251,255,.58);
+      font-size:12px;
+    }
+
+    .brand,
+    .tiny,
+    .login-v18,
+    .login-bottom-v18{
+      display:none!important;
+    }
+
+    @media (max-height:700px){
+      .logo-v20{
+        width:56px;
+        height:56px;
+        border-radius:20px;
+      }
+
+      .login-brand-v20{
+        margin-bottom:18px;
+      }
+
+      .login-card-v20{
+        padding:19px;
+      }
+
+      .login-title-v20 h1{
+        font-size:28px;
+      }
+
+      .form-v20 input{
+        height:52px;
+      }
+
+      .login-btn-v20{
+        height:54px!important;
+      }
+    }
+
+
+    /* Login v21 - profissional com Font Awesome */
+    .login-screen{
+      justify-content:center!important;
+      padding:10px 0!important;
+    }
+
+    .login-pro-v21{
+      width:100%;
+      min-height:calc(100svh - 36px);
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      position:relative;
+    }
+
+    .login-pro-v21::before{
+      content:"";
+      position:absolute;
+      top:2%;
+      left:50%;
+      width:310px;
+      height:310px;
+      transform:translateX(-50%);
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(76,216,255,.28), rgba(44,141,255,.10) 45%, transparent 70%);
+      filter:blur(10px);
+      pointer-events:none;
+    }
+
+    .login-brand-v21{
+      position:relative;
+      z-index:1;
+      text-align:center;
+      margin-bottom:20px;
+    }
+
+    .logo-v21{
+      width:78px;
+      height:78px;
+      margin:0 auto 15px;
+      display:grid;
+      place-items:center;
+      position:relative;
+      border-radius:28px;
+      background:linear-gradient(135deg,#2f91ff,#4fd7ff);
+      box-shadow:0 20px 48px rgba(47,145,255,.35);
+      color:#fff;
+      overflow:hidden;
+    }
+
+    .logo-v21::before{
+      content:"";
+      position:absolute;
+      inset:1px;
+      border-radius:27px;
+      background:linear-gradient(180deg,rgba(255,255,255,.22),transparent 48%);
+      pointer-events:none;
+    }
+
+    .logo-v21 span{
+      position:relative;
+      z-index:1;
+      font-size:32px;
+      font-weight:950;
+      letter-spacing:-.08em;
+    }
+
+    .logo-v21 i{
+      position:absolute;
+      right:10px;
+      bottom:9px;
+      width:23px;
+      height:23px;
+      display:grid;
+      place-items:center;
+      border-radius:999px;
+      background:rgba(8,18,36,.28);
+      border:1px solid rgba(255,255,255,.20);
+      font-size:11px;
+      z-index:2;
+    }
+
+    .login-brand-v21 h1{
+      margin:0;
+      font-size:33px;
+      line-height:1;
+      letter-spacing:-.07em;
+      color:#fff;
+    }
+
+    .login-brand-v21 p{
+      margin:9px 0 0;
+      color:rgba(248,251,255,.76);
+      font-size:13px;
+      line-height:1.45;
+    }
+
+    .login-card-v21{
+      position:relative;
+      z-index:1;
+      padding:19px;
+      border-radius:30px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.115), rgba(255,255,255,.055)),
+        rgba(16,29,55,.86);
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow:0 30px 75px rgba(0,0,0,.38);
+      backdrop-filter:blur(18px);
+      -webkit-backdrop-filter:blur(18px);
+      overflow:hidden;
+    }
+
+    .login-card-v21::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(79,215,255,.12), transparent 36%),
+        radial-gradient(circle at 0% 100%, rgba(47,145,255,.12), transparent 34%);
+      pointer-events:none;
+    }
+
+    .login-card-v21 > *{
+      position:relative;
+      z-index:1;
+    }
+
+    .login-card-head-v21{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding-bottom:15px;
+      margin-bottom:15px;
+      border-bottom:1px solid rgba(255,255,255,.10);
+    }
+
+    .head-icon-v21{
+      width:46px;
+      height:46px;
+      display:grid;
+      place-items:center;
+      border-radius:17px;
+      background:rgba(79,215,255,.12);
+      border:1px solid rgba(79,215,255,.18);
+      color:#71ddff;
+      flex:0 0 auto;
+      font-size:18px;
+    }
+
+    .login-card-head-v21 strong{
+      display:block;
+      font-size:18px;
+      letter-spacing:-.035em;
+      color:#fff;
+      line-height:1.1;
+    }
+
+    .login-card-head-v21 span{
+      display:block;
+      margin-top:4px;
+      color:rgba(248,251,255,.72);
+      font-size:12px;
+    }
+
+    .form-v21{
+      display:grid;
+      gap:13px;
+    }
+
+    .form-v21 label{
+      display:grid;
+      gap:8px;
+    }
+
+    .form-v21 label > span{
+      color:rgba(248,251,255,.76);
+      font-size:11px;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+
+    .input-group-v21{
+      position:relative;
+      display:flex;
+      align-items:center;
+    }
+
+    .input-group-v21 > i{
+      position:absolute;
+      left:15px;
+      z-index:2;
+      color:rgba(248,251,255,.50);
+      font-size:14px;
+      pointer-events:none;
+    }
+
+    .input-group-v21 input{
+      width:100%;
+      height:56px;
+      border-radius:18px!important;
+      border:1px solid rgba(255,255,255,.12)!important;
+      background:rgba(5,12,25,.52)!important;
+      color:#ffffff!important;
+      padding:0 15px 0 43px!important;
+      outline:none;
+      transition:border-color .18s ease, box-shadow .18s ease, background .18s ease;
+      font-size:14px;
+    }
+
+    .input-group-v21 input::placeholder{
+      color:rgba(248,251,255,.45)!important;
+    }
+
+    .input-group-v21 input:focus{
+      background:rgba(5,12,25,.66)!important;
+      border-color:rgba(79,215,255,.70)!important;
+      box-shadow:0 0 0 4px rgba(79,215,255,.10)!important;
+    }
+
+    .password-group-v21 input{
+      padding-right:58px!important;
+    }
+
+    .show-pass-v21{
+      position:absolute;
+      right:8px;
+      width:40px;
+      height:40px;
+      display:grid;
+      place-items:center;
+      border-radius:14px;
+      background:rgba(255,255,255,.075);
+      border:1px solid rgba(255,255,255,.10);
+      color:rgba(248,251,255,.76);
+      z-index:2;
+    }
+
+    .show-pass-v21 i{
+      font-size:14px;
+    }
+
+    .login-btn-v21{
+      height:58px!important;
+      margin-top:3px!important;
+      border-radius:19px!important;
+      display:flex!important;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      font-size:16px!important;
+      background:linear-gradient(135deg,#2f91ff,#4fd7ff)!important;
+      box-shadow:0 18px 42px rgba(47,145,255,.30)!important;
+    }
+
+    .login-btn-v21 i{
+      font-size:13px;
+    }
+
+    .login-features-v21{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:8px;
+      margin-top:14px;
+    }
+
+    .login-features-v21 div{
+      min-height:62px;
+      display:grid;
+      place-items:center;
+      text-align:center;
+      gap:5px;
+      padding:9px 5px;
+      border-radius:16px;
+      background:rgba(0,0,0,.12);
+      border:1px solid rgba(255,255,255,.08);
+      color:rgba(248,251,255,.70);
+    }
+
+    .login-features-v21 i{
+      color:#71ddff;
+      font-size:14px;
+    }
+
+    .login-features-v21 span{
+      font-size:10px;
+      line-height:1.15;
+      font-weight:800;
+    }
+
+    .brand,
+    .tiny,
+    .login-clean-v20,
+    .login-v18,
+    .login-bottom-v18{
+      display:none!important;
+    }
+
+    .avatar i,
+    .check i{
+      line-height:1;
+    }
+
+    @media (max-height:720px){
+      .logo-v21{
+        width:66px;
+        height:66px;
+        border-radius:24px;
+        margin-bottom:12px;
+      }
+
+      .logo-v21 span{
+        font-size:28px;
+      }
+
+      .login-brand-v21{
+        margin-bottom:15px;
+      }
+
+      .login-brand-v21 h1{
+        font-size:30px;
+      }
+
+      .login-card-v21{
+        padding:17px;
+      }
+
+      .login-card-head-v21{
+        padding-bottom:12px;
+        margin-bottom:12px;
+      }
+
+      .input-group-v21 input{
+        height:52px;
+      }
+
+      .login-btn-v21{
+        height:54px!important;
+      }
+
+      .login-features-v21{
+        margin-top:11px;
+      }
+
+      .login-features-v21 div{
+        min-height:54px;
+      }
+    }
+
+    @media (max-width:360px){
+      .login-features-v21{
+        grid-template-columns:1fr;
+      }
+
+      .login-features-v21 div{
+        min-height:42px;
+        grid-template-columns:auto 1fr;
+        justify-content:start;
+        text-align:left;
+        padding:9px 12px;
+      }
+    }
+
+
+    .login-card-v21{
+      background:
+        linear-gradient(160deg, rgba(25,72,145,.92) 0%, rgba(13,33,68,.94) 48%, rgba(5,10,20,.97) 100%)!important;
+      border:1px solid rgba(98,187,255,.18)!important;
+      box-shadow:
+        0 30px 75px rgba(0,0,0,.42),
+        inset 0 1px 0 rgba(255,255,255,.08)!important;
+    }
+
+    .login-card-v21::before{
+      background:
+        radial-gradient(circle at 0% 0%, rgba(94,196,255,.14), transparent 34%),
+        radial-gradient(circle at 100% 100%, rgba(35,118,255,.14), transparent 36%),
+        linear-gradient(180deg, rgba(255,255,255,.05), transparent 42%)!important;
+    }
+
+    .login-card-head-v21{
+      border-bottom:1px solid rgba(98,187,255,.16)!important;
+    }
+
+    .head-icon-v21{
+      background:rgba(94,196,255,.12)!important;
+      border:1px solid rgba(94,196,255,.22)!important;
+      color:#8fe3ff!important;
+    }
+
+    .input-group-v21 input{
+      background:rgba(3,8,18,.42)!important;
+      border:1px solid rgba(98,187,255,.14)!important;
+    }
+
+    .input-group-v21 input:focus{
+      background:rgba(3,8,18,.58)!important;
+      border-color:rgba(98,187,255,.62)!important;
+      box-shadow:0 0 0 4px rgba(98,187,255,.10)!important;
+    }
+
+    .show-pass-v21{
+      background:rgba(255,255,255,.08)!important;
+      border:1px solid rgba(98,187,255,.16)!important;
+    }
+
+    .login-features-v21 div{
+      background:linear-gradient(180deg, rgba(18,40,79,.62), rgba(5,10,20,.52))!important;
+      border:1px solid rgba(98,187,255,.10)!important;
+    }
+
+
+    .login-card-v21{
+      background:
+        linear-gradient(145deg,
+          rgba(55, 130, 255, 0.26) 0%,
+          rgba(24, 66, 145, 0.34) 32%,
+          rgba(8, 20, 42, 0.58) 68%,
+          rgba(3, 8, 18, 0.76) 100%)!important;
+      border:1px solid rgba(126, 203, 255, 0.22)!important;
+      box-shadow:
+        0 30px 80px rgba(0,0,0,.44),
+        0 0 0 1px rgba(255,255,255,.03) inset,
+        inset 0 1px 0 rgba(255,255,255,.10)!important;
+      backdrop-filter:blur(24px) saturate(150%)!important;
+      -webkit-backdrop-filter:blur(24px) saturate(150%)!important;
+    }
+
+    .login-card-v21::before{
+      background:
+        radial-gradient(circle at 0% 0%, rgba(117, 214, 255, 0.20), transparent 34%),
+        radial-gradient(circle at 100% 100%, rgba(36, 116, 255, 0.22), transparent 36%),
+        radial-gradient(circle at 50% 0%, rgba(255,255,255,.08), transparent 42%),
+        linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02) 40%, transparent 100%)!important;
+      opacity:1!important;
+    }
+
+    .login-card-v21::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:30px;
+      pointer-events:none;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.05), transparent 24%, transparent 76%, rgba(255,255,255,.03));
+      mix-blend-mode:screen;
+    }
+
+    .login-card-head-v21{
+      border-bottom:1px solid rgba(126, 203, 255, .16)!important;
+    }
+
+    .head-icon-v21{
+      background:linear-gradient(145deg, rgba(95, 199, 255, .18), rgba(40, 106, 255, .08))!important;
+      border:1px solid rgba(126, 203, 255, .22)!important;
+      color:#9be6ff!important;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.08);
+      backdrop-filter:blur(12px)!important;
+      -webkit-backdrop-filter:blur(12px)!important;
+    }
+
+    .input-group-v21 input{
+      background:linear-gradient(180deg, rgba(4,10,22,.40), rgba(4,10,22,.54))!important;
+      border:1px solid rgba(126, 203, 255, .14)!important;
+      backdrop-filter:blur(10px)!important;
+      -webkit-backdrop-filter:blur(10px)!important;
+    }
+
+    .input-group-v21 input:focus{
+      background:linear-gradient(180deg, rgba(4,10,22,.52), rgba(4,10,22,.66))!important;
+      border-color:rgba(126, 203, 255, .62)!important;
+      box-shadow:0 0 0 4px rgba(126, 203, 255, .10)!important;
+    }
+
+    .show-pass-v21{
+      background:linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.04))!important;
+      border:1px solid rgba(126, 203, 255, .16)!important;
+      backdrop-filter:blur(10px)!important;
+      -webkit-backdrop-filter:blur(10px)!important;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.06);
+    }
+
+    .login-features-v21 div{
+      background:
+        linear-gradient(180deg, rgba(25, 57, 108, .34), rgba(6, 12, 24, .42))!important;
+      border:1px solid rgba(126, 203, 255, .10)!important;
+      backdrop-filter:blur(12px)!important;
+      -webkit-backdrop-filter:blur(12px)!important;
+    }
+
+
+    /* v24 - Paleta baseada no login enviado: #0b1020, #11182b, #151b2c, #283047, #0072b1, #58a6ff */
+    :root{
+      --bg:#0b1020!important;
+      --bg2:#11182b!important;
+      --surface:#151b2c!important;
+      --surface-2:#1a2135!important;
+      --surface-3:#202940!important;
+      --card:#151b2c!important;
+      --line:rgba(40,48,71,.92)!important;
+      --line-2:rgba(88,166,255,.24)!important;
+      --text:#f4f7ff!important;
+      --muted:rgba(167,177,199,.94)!important;
+      --muted2:rgba(167,177,199,.72)!important;
+      --muted-2:rgba(167,177,199,.72)!important;
+      --blue:#0072b1!important;
+      --cyan:#58a6ff!important;
+      --accent:#0072b1!important;
+      --accent-2:#58a6ff!important;
+      --green:#3ddc97!important;
+      --success:#3ddc97!important;
+      --shadow:0 18px 45px rgba(0,0,0,.35)!important;
+      --shadow-sm:0 12px 30px rgba(0,0,0,.28)!important;
+    }
+
+    body{
+      background:
+        radial-gradient(circle at top, rgba(88,166,255,.18), transparent 32%),
+        radial-gradient(circle at bottom, rgba(0,114,177,.12), transparent 30%),
+        linear-gradient(180deg,#0b1020,#11182b)!important;
+    }
+
+    body::before{
+      opacity:.14!important;
+      background-image:
+        linear-gradient(rgba(88,166,255,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(88,166,255,.035) 1px, transparent 1px)!important;
+    }
+
+    .logo-v21,
+    .brand-mark,
+    .login-btn-v21,
+    .primary{
+      background:linear-gradient(90deg,#0072b1 0%,#58a6ff 100%)!important;
+      box-shadow:0 14px 30px rgba(0,114,177,.22)!important;
+    }
+
+    .login-pro-v21::before,
+    .login-clean-v20::before,
+    .login-v18::before{
+      background:radial-gradient(circle, rgba(88,166,255,.20), rgba(0,114,177,.09) 44%, transparent 70%)!important;
+    }
+
+    .login-card-v21{
+      background:
+        radial-gradient(circle at 100% 0%, rgba(88,166,255,.11), transparent 34%),
+        radial-gradient(circle at 0% 100%, rgba(0,114,177,.10), transparent 32%),
+        linear-gradient(145deg, rgba(21,27,44,.82), rgba(11,16,32,.88))!important;
+      border:1px solid rgba(40,48,71,.95)!important;
+      box-shadow:0 18px 45px rgba(0,0,0,.35)!important;
+      backdrop-filter:blur(22px) saturate(140%)!important;
+      -webkit-backdrop-filter:blur(22px) saturate(140%)!important;
+    }
+
+    .login-card-v21::before{
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.018)),
+        radial-gradient(circle at top, rgba(88,166,255,.10), transparent 45%)!important;
+    }
+
+    .login-card-head-v21,
+    .account-card-v14,
+    .renew-card-v14,
+    .card,
+    dialog{
+      background:
+        radial-gradient(circle at top, rgba(88,166,255,.075), transparent 36%),
+        rgba(21,27,44,.94)!important;
+      border-color:rgba(40,48,71,.95)!important;
+      box-shadow:0 18px 45px rgba(0,0,0,.35)!important;
+    }
+
+    .head-icon-v21,
+    .avatar,
+    .avatar-v14,
+    .lock-v18{
+      background:rgba(88,166,255,.08)!important;
+      border:1px solid rgba(88,166,255,.18)!important;
+      color:#dceaff!important;
+    }
+
+    .input-group-v21 input,
+    .form-v20 input,
+    input{
+      background:rgba(255,255,255,.04)!important;
+      border:1px solid #283047!important;
+      color:#f4f7ff!important;
+    }
+
+    .input-group-v21 input::placeholder,
+    .form-v20 input::placeholder,
+    input::placeholder{
+      color:rgba(167,177,199,.68)!important;
+    }
+
+    .input-group-v21 input:focus,
+    .form-v20 input:focus,
+    input:focus{
+      border-color:#58a6ff!important;
+      box-shadow:0 0 0 4px rgba(88,166,255,.12)!important;
+      background:rgba(255,255,255,.06)!important;
+    }
+
+    .show-pass-v21,
+    .show-pass-v20,
+    .show-pass,
+    .ghost,
+    .small,
+    .compact-btn,
+    .modal-close,
+    .icon-btn{
+      background:rgba(255,255,255,.045)!important;
+      border:1px solid #283047!important;
+      color:#dceaff!important;
+    }
+
+    .login-features-v21 div,
+    .account-strip-v14 div,
+    .price-card-v14,
+    .validity-card-v14,
+    .checkout-summary div,
+    .checkout-link-box,
+    .auto-status,
+    .stat,
+    .summary,
+    .clean-summary,
+    .period-tabs-v14,
+    .period-tabs,
+    .plan,
+    .helper-card{
+      background:rgba(255,255,255,.04)!important;
+      border-color:rgba(40,48,71,.92)!important;
+    }
+
+    .period-tab-v14,
+    .period-tab,
+    .month-option{
+      background:rgba(255,255,255,.035)!important;
+      border-color:rgba(40,48,71,.92)!important;
+      color:#a7b1c7!important;
+    }
+
+    .period-tab-v14.active,
+    .period-tab.active,
+    .month-option.active,
+    .plan.active{
+      background:
+        linear-gradient(90deg, rgba(0,114,177,.34), rgba(88,166,255,.18))!important;
+      border-color:rgba(88,166,255,.62)!important;
+      color:#f4f7ff!important;
+      box-shadow:0 14px 30px rgba(0,114,177,.20)!important;
+    }
+
+    .pay-ok,
+    .pay-ok-v14,
+    .status-chip{
+      background:rgba(61,220,151,.10)!important;
+      border:1px solid rgba(61,220,151,.18)!important;
+      color:#d6ffe9!important;
+    }
+
+    .checkout-status,
+    .payment-status{
+      background:rgba(88,166,255,.08)!important;
+      border:1px solid rgba(88,166,255,.18)!important;
+      color:#dceaff!important;
+    }
+
+    .validity-card-v14 strong,
+    .validity-line strong,
+    .success-validity strong,
+    .status-ok{
+      color:#d6ffe9!important;
+    }
+
+    .login-brand-v21 p,
+    .login-card-head-v21 span,
+    .login-features-v21 div,
+    .renew-head-v14 p,
+    .account-main-v14 span,
+    .checkout-head p,
+    .auto-status small,
+    .modal p{
+      color:#a7b1c7!important;
+    }
+
+    .form-v21 label > span,
+    .account-strip-v14 span,
+    .price-card-v14 span,
+    .validity-card-v14 span,
+    .checkout-summary span,
+    .checkout-link-box > span{
+      color:#dceaff!important;
+    }
+
+    .toast{
+      background:rgba(11,16,32,.96)!important;
+      border:1px solid #283047!important;
+      box-shadow:0 18px 45px rgba(0,0,0,.35)!important;
+    }
+
+
+    /* v25 - black + blue glass premium */
+    :root{
+      --bg:#050811!important;
+      --bg2:#0a1020!important;
+      --surface:#0d1424!important;
+      --surface-2:#111a2d!important;
+      --surface-3:#17233a!important;
+      --card:#0d1424!important;
+      --line:rgba(118,153,215,.14)!important;
+      --line-2:rgba(98,170,255,.24)!important;
+      --text:#f6f9ff!important;
+      --muted:rgba(214,226,255,.76)!important;
+      --muted2:rgba(214,226,255,.58)!important;
+      --muted-2:rgba(214,226,255,.58)!important;
+      --blue:#1f74ff!important;
+      --cyan:#5bc8ff!important;
+      --accent:#1f74ff!important;
+      --accent-2:#5bc8ff!important;
+      --green:#59e0a1!important;
+      --success:#59e0a1!important;
+      --shadow:0 24px 60px rgba(0,0,0,.42)!important;
+      --shadow-sm:0 14px 34px rgba(0,0,0,.32)!important;
+    }
+
+    body{
+      background:
+        radial-gradient(circle at 20% 0%, rgba(31,116,255,.20), transparent 30%),
+        radial-gradient(circle at 100% 10%, rgba(91,200,255,.10), transparent 24%),
+        radial-gradient(circle at 50% 100%, rgba(16,44,94,.16), transparent 36%),
+        linear-gradient(180deg, #050811 0%, #0a1020 52%, #070d19 100%)!important;
+    }
+
+    body::before{
+      opacity:.10!important;
+      background-image:
+        linear-gradient(rgba(91,200,255,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(91,200,255,.03) 1px, transparent 1px)!important;
+    }
+
+    .logo-v21,
+    .brand-mark,
+    .login-btn-v21,
+    .primary{
+      background:linear-gradient(135deg, #1f74ff 0%, #2998ff 45%, #5bc8ff 100%)!important;
+      box-shadow:
+        0 16px 38px rgba(31,116,255,.28),
+        inset 0 1px 0 rgba(255,255,255,.12)!important;
+      color:#fff!important;
+    }
+
+    .login-pro-v21::before,
+    .login-clean-v20::before,
+    .login-v18::before{
+      background:radial-gradient(circle, rgba(41,152,255,.22), rgba(31,116,255,.08) 45%, transparent 72%)!important;
+      filter:blur(12px)!important;
+    }
+
+    .login-card-v21,
+    .login-card-v20,
+    .login-card-v18,
+    .account-card-v14,
+    .renew-card-v14,
+    .card,
+    dialog{
+      background:
+        linear-gradient(145deg,
+          rgba(16,22,38,.78) 0%,
+          rgba(12,18,31,.72) 36%,
+          rgba(7,11,20,.82) 100%)!important;
+      border:1px solid rgba(105,155,255,.15)!important;
+      box-shadow:
+        0 26px 70px rgba(0,0,0,.42),
+        inset 0 1px 0 rgba(255,255,255,.06)!important;
+      backdrop-filter:blur(22px) saturate(145%)!important;
+      -webkit-backdrop-filter:blur(22px) saturate(145%)!important;
+    }
+
+    .login-card-v21::before,
+    .login-card-v20::before,
+    .login-card-v18::before{
+      background:
+        radial-gradient(circle at 100% 0%, rgba(91,200,255,.12), transparent 34%),
+        radial-gradient(circle at 0% 100%, rgba(31,116,255,.10), transparent 32%),
+        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.015) 44%)!important;
+      opacity:1!important;
+    }
+
+    .login-card-head-v21,
+    .login-card-top-v18,
+    .head-row{
+      border-bottom:1px solid rgba(105,155,255,.12)!important;
+    }
+
+    .head-icon-v21,
+    .avatar,
+    .avatar-v14,
+    .lock-v18{
+      background:linear-gradient(145deg, rgba(91,200,255,.10), rgba(31,116,255,.07))!important;
+      border:1px solid rgba(91,200,255,.16)!important;
+      color:#dff3ff!important;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.06)!important;
+      backdrop-filter:blur(10px)!important;
+      -webkit-backdrop-filter:blur(10px)!important;
+    }
+
+    .input-group-v21 input,
+    .form-v20 input,
+    .input-v18 input,
+    input{
+      background:linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.025))!important;
+      border:1px solid rgba(105,155,255,.13)!important;
+      color:#f6f9ff!important;
+      backdrop-filter:blur(10px)!important;
+      -webkit-backdrop-filter:blur(10px)!important;
+    }
+
+    .input-group-v21 input::placeholder,
+    .form-v20 input::placeholder,
+    .input-v18 input::placeholder,
+    input::placeholder{
+      color:rgba(214,226,255,.42)!important;
+    }
+
+    .input-group-v21 input:focus,
+    .form-v20 input:focus,
+    .input-v18 input:focus,
+    input:focus{
+      border-color:rgba(91,200,255,.64)!important;
+      box-shadow:
+        0 0 0 4px rgba(91,200,255,.10),
+        0 10px 25px rgba(31,116,255,.10)!important;
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03))!important;
+    }
+
+    .show-pass-v21,
+    .show-pass-v20,
+    .show-pass-v18,
+    .show-pass,
+    .ghost,
+    .small,
+    .compact-btn,
+    .modal-close,
+    .icon-btn{
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.025))!important;
+      border:1px solid rgba(105,155,255,.12)!important;
+      color:#e5f0ff!important;
+      backdrop-filter:blur(10px)!important;
+      -webkit-backdrop-filter:blur(10px)!important;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.04)!important;
+    }
+
+    .login-features-v21 div,
+    .account-strip-v14 div,
+    .price-card-v14,
+    .validity-card-v14,
+    .checkout-summary div,
+    .checkout-link-box,
+    .auto-status,
+    .stat,
+    .summary,
+    .clean-summary,
+    .period-tabs-v14,
+    .period-tabs,
+    .helper-card{
+      background:linear-gradient(180deg, rgba(255,255,255,.042), rgba(255,255,255,.024))!important;
+      border:1px solid rgba(105,155,255,.10)!important;
+      backdrop-filter:blur(12px)!important;
+      -webkit-backdrop-filter:blur(12px)!important;
+    }
+
+    .period-tab-v14,
+    .period-tab,
+    .month-option,
+    .plan{
+      background:linear-gradient(180deg, rgba(255,255,255,.032), rgba(255,255,255,.018))!important;
+      border:1px solid rgba(105,155,255,.10)!important;
+      color:rgba(214,226,255,.72)!important;
+      backdrop-filter:blur(10px)!important;
+      -webkit-backdrop-filter:blur(10px)!important;
+    }
+
+    .period-tab-v14.active,
+    .period-tab.active,
+    .month-option.active,
+    .plan.active{
+      background:
+        linear-gradient(135deg, rgba(31,116,255,.28), rgba(91,200,255,.14))!important;
+      border-color:rgba(91,200,255,.38)!important;
+      color:#f6f9ff!important;
+      box-shadow:
+        0 16px 34px rgba(31,116,255,.18),
+        inset 0 1px 0 rgba(255,255,255,.05)!important;
+    }
+
+    .login-brand-v21 p,
+    .login-card-head-v21 span,
+    .login-features-v21 div,
+    .renew-head-v14 p,
+    .account-main-v14 span,
+    .checkout-head p,
+    .auto-status small,
+    .modal p,
+    .helper-card{
+      color:rgba(214,226,255,.72)!important;
+    }
+
+    .form-v21 label > span,
+    .form-v20 label,
+    .login-label-v18,
+    .account-strip-v14 span,
+    .price-card-v14 span,
+    .validity-card-v14 span,
+    .checkout-summary span,
+    .checkout-link-box > span,
+    .clean-plan-line span,
+    .validity-line span,
+    .clean-meta span{
+      color:rgba(232,241,255,.86)!important;
+    }
+
+    .pay-ok,
+    .pay-ok-v14,
+    .status-chip{
+      background:rgba(89,224,161,.10)!important;
+      border:1px solid rgba(89,224,161,.18)!important;
+      color:#dbffe9!important;
+    }
+
+    .checkout-status,
+    .payment-status{
+      background:rgba(91,200,255,.08)!important;
+      border:1px solid rgba(91,200,255,.16)!important;
+      color:#dff3ff!important;
+    }
+
+    .validity-card-v14 strong,
+    .validity-line strong,
+    .success-validity strong,
+    .status-ok{
+      color:#d6ffe9!important;
+    }
+
+    .price-card-v14 > strong,
+    .clean-plan-line > strong{
+      color:#ffffff!important;
+    }
+
+    .toast{
+      background:rgba(7,11,20,.94)!important;
+      border:1px solid rgba(105,155,255,.12)!important;
+      box-shadow:0 20px 44px rgba(0,0,0,.38)!important;
+      backdrop-filter:blur(16px)!important;
+      -webkit-backdrop-filter:blur(16px)!important;
+    }
+
+
+    /* v26 - correção de contraste/legibilidade dos campos */
+    .form-v21 label > span,
+    .form-v20 label,
+    .login-label-v18{
+      color:rgba(245,249,255,.92)!important;
+      text-shadow:none!important;
+    }
+
+    .input-group-v21 > i,
+    .input-v18 .input-icon-v18,
+    .password-v20 .input-icon-v18{
+      color:rgba(255,255,255,.72)!important;
+      opacity:1!important;
+      filter:none!important;
+      text-shadow:none!important;
+    }
+
+    .input-group-v21 input,
+    .form-v20 input,
+    .input-v18 input,
+    input{
+      color:#ffffff!important;
+      -webkit-text-fill-color:#ffffff!important;
+      caret-color:#ffffff!important;
+      font-weight:700!important;
+      letter-spacing:0!important;
+      text-shadow:none!important;
+      box-shadow:none!important;
+    }
+
+    .input-group-v21 input::placeholder,
+    .form-v20 input::placeholder,
+    .input-v18 input::placeholder,
+    input::placeholder{
+      color:rgba(234,242,255,.62)!important;
+      -webkit-text-fill-color:rgba(234,242,255,.62)!important;
+      font-weight:600!important;
+      opacity:1!important;
+      text-shadow:none!important;
+    }
+
+    .input-group-v21 input:focus,
+    .form-v20 input:focus,
+    .input-v18 input:focus,
+    input:focus{
+      color:#ffffff!important;
+      -webkit-text-fill-color:#ffffff!important;
+      text-shadow:none!important;
+    }
+
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    textarea:-webkit-autofill,
+    select:-webkit-autofill{
+      -webkit-text-fill-color:#ffffff!important;
+      caret-color:#ffffff!important;
+      box-shadow:0 0 0px 1000px rgba(255,255,255,.06) inset!important;
+      transition:background-color 9999s ease-in-out 0s!important;
+    }
+
+    .show-pass-v21,
+    .show-pass-v20,
+    .show-pass-v18,
+    .show-pass{
+      color:#eef5ff!important;
+      font-weight:800!important;
+    }
+
+    .show-pass-v21 i{
+      color:#eef5ff!important;
+      opacity:1!important;
+    }
+
+    .login-card-head-v21 span,
+    .login-brand-v21 p{
+      color:rgba(234,242,255,.76)!important;
+    }
+
+
+    /* v27 - blocos inferiores do login + novo botão entrar */
+    .login-features-v21{
+      display:grid!important;
+      grid-template-columns:repeat(3, 1fr)!important;
+      gap:10px!important;
+      margin-top:14px!important;
+    }
+
+    .login-features-v21 div{
+      min-height:54px!important;
+      display:flex!important;
+      align-items:center!important;
+      justify-content:center!important;
+      gap:8px!important;
+      padding:10px 8px!important;
+      border-radius:16px!important;
+      background:linear-gradient(180deg, rgba(255,255,255,.040), rgba(255,255,255,.018))!important;
+      border:1px solid rgba(108,150,230,.10)!important;
+      backdrop-filter:blur(10px)!important;
+      -webkit-backdrop-filter:blur(10px)!important;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.035)!important;
+      color:rgba(236,243,255,.84)!important;
+      text-align:center!important;
+    }
+
+    .login-features-v21 i{
+      color:#7fd2ff!important;
+      font-size:13px!important;
+      flex:0 0 auto!important;
+      margin:0!important;
+    }
+
+    .login-features-v21 span{
+      font-size:11px!important;
+      line-height:1.15!important;
+      font-weight:800!important;
+      letter-spacing:0!important;
+      color:rgba(236,243,255,.84)!important;
+    }
+
+    .login-btn-v21,
+    .login-btn-v21.primary,
+    .loginBtn,
+    #loginBtn{
+      background:linear-gradient(135deg, #2b6cff 0%, #3e86ff 52%, #5aa8ff 100%)!important;
+      box-shadow:
+        0 16px 36px rgba(43,108,255,.28),
+        inset 0 1px 0 rgba(255,255,255,.14)!important;
+      color:#ffffff!important;
+    }
+
+    .login-btn-v21:hover,
+    #loginBtn:hover{
+      filter:brightness(1.04)!important;
+    }
+
+    .login-btn-v21 i,
+    #loginBtn i{
+      color:#ffffff!important;
+    }
+
+    @media (max-width:360px){
+      .login-features-v21{
+        grid-template-columns:1fr!important;
+      }
+
+      .login-features-v21 div{
+        justify-content:flex-start!important;
+        padding:11px 12px!important;
+      }
+    }
+
+
+    /* v28 - botão Entrar mais premium */
+    .login-btn-v21,
+    .login-btn-v21.primary,
+    #loginBtn{
+      position:relative!important;
+      overflow:hidden!important;
+      height:58px!important;
+      border:none!important;
+      border-radius:20px!important;
+      background:
+        linear-gradient(135deg, #1e56d9 0%, #2b6cff 40%, #4ea5ff 100%)!important;
+      color:#ffffff!important;
+      box-shadow:
+        0 16px 34px rgba(20,72,190,.34),
+        0 6px 14px rgba(78,165,255,.16),
+        inset 0 1px 0 rgba(255,255,255,.18)!important;
+      font-size:16px!important;
+      font-weight:900!important;
+      letter-spacing:.01em!important;
+      transition:transform .16s ease, filter .16s ease, box-shadow .16s ease!important;
+    }
+
+    .login-btn-v21::before,
+    .login-btn-v21.primary::before,
+    #loginBtn::before{
+      content:""!important;
+      position:absolute!important;
+      inset:1px!important;
+      border-radius:19px!important;
+      background:linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,0) 42%)!important;
+      pointer-events:none!important;
+    }
+
+    .login-btn-v21::after,
+    .login-btn-v21.primary::after,
+    #loginBtn::after{
+      content:""!important;
+      position:absolute!important;
+      top:0!important;
+      left:-120%!important;
+      width:70%!important;
+      height:100%!important;
+      background:linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent)!important;
+      transform:skewX(-22deg)!important;
+      pointer-events:none!important;
+    }
+
+    .login-btn-v21 span,
+    .login-btn-v21 i,
+    #loginBtn span,
+    #loginBtn i{
+      position:relative!important;
+      z-index:1!important;
+      color:#ffffff!important;
+    }
+
+    .login-btn-v21:hover,
+    .login-btn-v21.primary:hover,
+    #loginBtn:hover{
+      filter:brightness(1.05)!important;
+      box-shadow:
+        0 18px 38px rgba(20,72,190,.38),
+        0 8px 18px rgba(78,165,255,.18),
+        inset 0 1px 0 rgba(255,255,255,.20)!important;
+    }
+
+    .login-btn-v21:active,
+    .login-btn-v21.primary:active,
+    #loginBtn:active{
+      transform:translateY(1px) scale(.992)!important;
+      box-shadow:
+        0 10px 22px rgba(20,72,190,.28),
+        0 4px 10px rgba(78,165,255,.14),
+        inset 0 1px 0 rgba(255,255,255,.14)!important;
+    }
+
+    .login-btn-v21:disabled,
+    .login-btn-v21.primary:disabled,
+    #loginBtn:disabled{
+      opacity:.72!important;
+      filter:saturate(.88)!important;
+    }
+
+
+    /* v29 - botão Entrar em azul fechado, menos vivo */
+    .login-btn-v21,
+    .login-btn-v21.primary,
+    #loginBtn{
+      background:
+        linear-gradient(135deg, #0d2b5f 0%, #123f82 48%, #1b5fa8 100%)!important;
+      border:1px solid rgba(116,168,255,.16)!important;
+      box-shadow:
+        0 14px 30px rgba(0,0,0,.30),
+        0 10px 24px rgba(18,63,130,.20),
+        inset 0 1px 0 rgba(255,255,255,.10)!important;
+      color:#f6f9ff!important;
+    }
+
+    .login-btn-v21::before,
+    .login-btn-v21.primary::before,
+    #loginBtn::before{
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,0) 46%)!important;
+    }
+
+    .login-btn-v21::after,
+    .login-btn-v21.primary::after,
+    #loginBtn::after{
+      background:
+        linear-gradient(90deg, transparent, rgba(255,255,255,.10), transparent)!important;
+    }
+
+    .login-btn-v21:hover,
+    .login-btn-v21.primary:hover,
+    #loginBtn:hover{
+      filter:brightness(1.03)!important;
+      box-shadow:
+        0 15px 32px rgba(0,0,0,.32),
+        0 10px 24px rgba(18,63,130,.22),
+        inset 0 1px 0 rgba(255,255,255,.11)!important;
+    }
+
+    .login-btn-v21:active,
+    .login-btn-v21.primary:active,
+    #loginBtn:active{
+      transform:translateY(1px) scale(.992)!important;
+      box-shadow:
+        0 9px 20px rgba(0,0,0,.28),
+        0 6px 16px rgba(18,63,130,.18),
+        inset 0 1px 0 rgba(255,255,255,.08)!important;
+    }
+
+
+    /* v31 - bloco de validade mais centralizado e organizado */
+    .validity-card-v14,
+    .validity-preview,
+    .validity-line{
+      display:grid!important;
+      grid-template-columns:1fr auto 1fr!important;
+      align-items:center!important;
+      gap:14px!important;
+      padding:14px 16px!important;
+      text-align:center!important;
+    }
+
+    .validity-card-v14 > div:first-child,
+    .validity-card-v14 > div:last-child,
+    .validity-preview > div:first-child,
+    .validity-preview > div:last-child,
+    .validity-line > div:first-child,
+    .validity-line > div:last-child{
+      display:flex!important;
+      flex-direction:column!important;
+      align-items:center!important;
+      justify-content:center!important;
+      min-width:0!important;
+      text-align:center!important;
+    }
+
+    .validity-card-v14 span,
+    .validity-preview span,
+    .validity-line span{
+      margin-bottom:6px!important;
+      text-align:center!important;
+    }
+
+    .validity-card-v14 strong,
+    .validity-preview strong,
+    .validity-line strong{
+      text-align:center!important;
+      white-space:nowrap!important;
+      overflow:hidden!important;
+      text-overflow:ellipsis!important;
+    }
+
+    .validity-arrow-v14,
+    .validity-preview .arrow,
+    .validity-divider{
+      width:34px!important;
+      height:34px!important;
+      display:grid!important;
+      place-items:center!important;
+      margin:0 auto!important;
+      border-radius:999px!important;
+      text-align:center!important;
+      flex:0 0 auto!important;
+    }
+
+    @media (max-width:380px){
+      .validity-card-v14,
+      .validity-preview,
+      .validity-line{
+        gap:10px!important;
+        padding:13px 12px!important;
+      }
+
+      .validity-card-v14 strong,
+      .validity-preview strong,
+      .validity-line strong{
+        font-size:12px!important;
+      }
+
+      .validity-arrow-v14,
+      .validity-preview .arrow,
+      .validity-divider{
+        width:30px!important;
+        height:30px!important;
+      }
+    }
+
+
+    /* v32 - seletor de período e card de valor mais organizados */
+    .period-tabs-v14{
+      gap:10px!important;
+      padding:0!important;
+      background:transparent!important;
+      border:none!important;
+      margin-bottom:12px!important;
+    }
+
+    .period-tab-v14{
+      min-height:66px!important;
+      padding:12px 8px!important;
+      border-radius:20px!important;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02))!important;
+      border:1px solid rgba(105,155,255,.11)!important;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.03)!important;
+    }
+
+    .period-tab-v14 b{
+      font-size:24px!important;
+      margin-bottom:2px!important;
+    }
+
+    .period-tab-v14 span{
+      font-size:10px!important;
+      letter-spacing:.08em!important;
+      opacity:.9!important;
+    }
+
+    .period-tab-v14.active{
+      background:
+        linear-gradient(135deg, rgba(31,116,255,.24), rgba(91,200,255,.12))!important;
+      border-color:rgba(91,200,255,.34)!important;
+      box-shadow:
+        0 12px 30px rgba(31,116,255,.14),
+        inset 0 1px 0 rgba(255,255,255,.06)!important;
+    }
+
+    .price-card-v14{
+      display:grid!important;
+      grid-template-columns:minmax(0,1fr) auto!important;
+      align-items:center!important;
+      gap:14px!important;
+      padding:15px 16px!important;
+      border-radius:22px!important;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,.04), rgba(255,255,255,.018))!important;
+      border:1px solid rgba(105,155,255,.11)!important;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.03)!important;
+      margin-bottom:10px!important;
+    }
+
+    .price-copy-v32{
+      min-width:0!important;
+    }
+
+    .price-label-v32,
+    .price-value-label-v32{
+      display:block!important;
+      margin-bottom:7px!important;
+      color:rgba(232,241,255,.76)!important;
+      font-size:10px!important;
+      font-weight:900!important;
+      letter-spacing:.08em!important;
+      text-transform:uppercase!important;
+    }
+
+    .price-copy-v32 #summaryPeriod{
+      display:block!important;
+      color:#ffffff!important;
+      font-size:16px!important;
+      line-height:1.15!important;
+      font-weight:900!important;
+      letter-spacing:-.02em!important;
+      white-space:nowrap!important;
+      overflow:hidden!important;
+      text-overflow:ellipsis!important;
+      margin-bottom:5px!important;
+    }
+
+    .price-copy-v32 #summaryPlan{
+      display:block!important;
+      color:rgba(214,226,255,.68)!important;
+      font-size:12px!important;
+      line-height:1.35!important;
+      font-weight:600!important;
+      white-space:normal!important;
+    }
+
+    .price-value-v32{
+      text-align:right!important;
+      min-width:110px!important;
+    }
+
+    .price-value-v32 #summaryTotal{
+      display:block!important;
+      color:#ffffff!important;
+      font-size:21px!important;
+      line-height:1!important;
+      font-weight:900!important;
+      letter-spacing:-.05em!important;
+      white-space:nowrap!important;
+    }
+
+    @media (max-width:380px){
+      .period-tab-v14{
+        min-height:60px!important;
+        border-radius:18px!important;
+      }
+
+      .period-tab-v14 b{
+        font-size:22px!important;
+      }
+
+      .price-card-v14{
+        padding:14px!important;
+        gap:10px!important;
+      }
+
+      .price-copy-v32 #summaryPlan{
+        font-size:11px!important;
+      }
+
+      .price-value-v32{
+        min-width:95px!important;
+      }
+
+      .price-value-v32 #summaryTotal{
+        font-size:18px!important;
+      }
+    }
+
+
+    /* v33 - remove repetição do plano no resumo */
+    .price-card-v33{
+      display:flex!important;
+      align-items:center!important;
+      justify-content:space-between!important;
+      gap:14px!important;
+      padding:15px 16px!important;
+      border-radius:22px!important;
+      margin-bottom:10px!important;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,.040), rgba(255,255,255,.018))!important;
+      border:1px solid rgba(105,155,255,.11)!important;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.03)!important;
+    }
+
+    .price-copy-v33{
+      min-width:0!important;
+      display:grid!important;
+      gap:4px!important;
+    }
+
+    .price-copy-v33 span{
+      display:block!important;
+      margin:0!important;
+      color:rgba(246,249,255,.92)!important;
+      font-size:14px!important;
+      line-height:1.2!important;
+      font-weight:900!important;
+      letter-spacing:-.02em!important;
+      text-transform:none!important;
+    }
+
+    .price-copy-v33 small{
+      display:block!important;
+      color:rgba(214,226,255,.62)!important;
+      font-size:11px!important;
+      line-height:1.25!important;
+      font-weight:600!important;
+    }
+
+    .price-card-v33 #summaryTotal{
+      flex:0 0 auto!important;
+      color:#ffffff!important;
+      font-size:24px!important;
+      line-height:1!important;
+      font-weight:950!important;
+      letter-spacing:-.06em!important;
+      white-space:nowrap!important;
+    }
+
+    .price-card-v33 #summaryPlan,
+    .price-card-v33 #summaryPeriod{
+      display:none!important;
+    }
+
+    @media (max-width:380px){
+      .price-card-v33{
+        padding:14px!important;
+        gap:10px!important;
+      }
+
+      .price-copy-v33 span{
+        font-size:13px!important;
+      }
+
+      .price-copy-v33 small{
+        font-size:10px!important;
+      }
+
+      .price-card-v33 #summaryTotal{
+        font-size:21px!important;
+      }
+    }
+
+
+    /* v35 - modal de sucesso refinado */
+    .clean-success{
+      padding:10px 0 2px!important;
+    }
+
+    .clean-success .check{
+      width:78px!important;
+      height:78px!important;
+      margin:0 auto 16px!important;
+      border-radius:26px!important;
+      background:linear-gradient(145deg, rgba(89,224,161,.13), rgba(89,224,161,.06))!important;
+      border:1px solid rgba(89,224,161,.18)!important;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.06)!important;
+    }
+
+    .clean-success h3{
+      margin-bottom:10px!important;
+    }
+
+    .clean-success p{
+      max-width:300px!important;
+      margin-left:auto!important;
+      margin-right:auto!important;
+      text-align:center!important;
+    }
+
+    .success-validity-v35{
+      margin:16px 0 18px!important;
+      padding:14px 16px!important;
+      text-align:center!important;
+      border-radius:20px!important;
+    }
+
+    .success-validity-v35 span{
+      text-align:center!important;
+      margin-bottom:8px!important;
+      font-size:10px!important;
+      letter-spacing:.10em!important;
+    }
+
+    .success-validity-v35 strong{
+      text-align:center!important;
+      font-size:16px!important;
+      line-height:1.1!important;
+      letter-spacing:-.02em!important;
+      color:#dbffe9!important;
+    }
+
+    .finish-btn-v35,
+    .finish-btn-v35.primary,
+    #finishBtn{
+      width:100%!important;
+      margin-top:0!important;
+      background:
+        linear-gradient(135deg, #0d2b5f 0%, #123f82 48%, #1b5fa8 100%)!important;
+      border:1px solid rgba(116,168,255,.16)!important;
+      box-shadow:
+        0 14px 30px rgba(0,0,0,.30),
+        0 10px 24px rgba(18,63,130,.20),
+        inset 0 1px 0 rgba(255,255,255,.10)!important;
+      color:#f6f9ff!important;
+    }
+
+    .finish-btn-v35::before,
+    #finishBtn::before{
+      background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,0) 46%)!important;
+    }
+
+    .finish-btn-v35::after,
+    #finishBtn::after{
+      background:linear-gradient(90deg, transparent, rgba(255,255,255,.10), transparent)!important;
+    }
+
+    .finish-btn-v35:hover,
+    #finishBtn:hover{
+      filter:brightness(1.03)!important;
+    }
+
+
+    /* v36 - ajustes pedidos no fluxo de pagamento */
+    .price-copy-v33 small{
+      display:none!important;
+    }
+
+    .action-btn-v36,
+    .action-btn-v36.primary,
+    #payBtn,
+    #openPaymentBtn{
+      min-height:50px!important;
+      height:50px!important;
+      padding:0 18px!important;
+      border-radius:18px!important;
+      background:
+        linear-gradient(135deg, #0d2b5f 0%, #123f82 48%, #1b5fa8 100%)!important;
+      border:1px solid rgba(116,168,255,.16)!important;
+      box-shadow:
+        0 14px 30px rgba(0,0,0,.30),
+        0 10px 24px rgba(18,63,130,.20),
+        inset 0 1px 0 rgba(255,255,255,.10)!important;
+      color:#f6f9ff!important;
+      font-size:15px!important;
+      font-weight:900!important;
+      letter-spacing:.01em!important;
+    }
+
+    .action-btn-v36::before,
+    #payBtn::before,
+    #openPaymentBtn::before{
+      background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,0) 46%)!important;
+    }
+
+    .action-btn-v36::after,
+    #payBtn::after,
+    #openPaymentBtn::after{
+      background:linear-gradient(90deg, transparent, rgba(255,255,255,.10), transparent)!important;
+    }
+
+    .action-btn-v36:hover,
+    #payBtn:hover,
+    #openPaymentBtn:hover{
+      filter:brightness(1.03)!important;
+    }
+
+    .checkout-actions{
+      display:grid!important;
+      grid-template-columns:1fr auto!important;
+      gap:10px!important;
+      align-items:stretch!important;
+    }
+
+    .open-pay-btn-v36{
+      width:100%!important;
+    }
+
+    .copy-btn-v36,
+    #copyBtn{
+      min-height:50px!important;
+      height:50px!important;
+      padding:0 18px!important;
+      border-radius:18px!important;
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.025))!important;
+      border:1px solid rgba(105,155,255,.12)!important;
+      color:#eef5ff!important;
+      font-size:15px!important;
+      font-weight:850!important;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.04)!important;
+      backdrop-filter:blur(10px)!important;
+      -webkit-backdrop-filter:blur(10px)!important;
+    }
+
+    .copy-btn-v36:hover,
+    #copyBtn:hover{
+      filter:brightness(1.03)!important;
+    }
+
+    @media (max-width:360px){
+      .action-btn-v36,
+      #payBtn,
+      #openPaymentBtn,
+      .copy-btn-v36,
+      #copyBtn{
+        min-height:46px!important;
+        height:46px!important;
+        border-radius:16px!important;
+        font-size:14px!important;
+      }
+    }
+
+
+    /* v37 - toast no modal + título TOTAL A PAGAR */
+    .payment-modal{
+      position:relative!important;
+      overflow:hidden!important;
+      padding-bottom:26px!important;
+    }
+
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom:max(18px, env(safe-area-inset-bottom));
+      width:min(390px, calc(100% - 24px));
+      padding:12px 14px;
+      border-radius:16px;
+      background:
+        linear-gradient(145deg, rgba(16,22,38,.92), rgba(7,11,20,.96))!important;
+      border:1px solid rgba(105,155,255,.14)!important;
+      color:#f6f9ff!important;
+      box-shadow:
+        0 20px 44px rgba(0,0,0,.38),
+        inset 0 1px 0 rgba(255,255,255,.05)!important;
+      transform:translateX(-50%) translateY(120px);
+      transition:transform .22s ease, opacity .22s ease;
+      z-index:30;
+      font-size:12px;
+      line-height:1.4;
+      text-align:center;
+      opacity:0;
+      backdrop-filter:blur(16px)!important;
+      -webkit-backdrop-filter:blur(16px)!important;
+    }
+
+    .toast.show{
+      transform:translateX(-50%) translateY(0);
+      opacity:1;
+    }
+
+    .toast-modal{
+      position:absolute!important;
+      left:14px!important;
+      right:14px!important;
+      bottom:12px!important;
+      width:auto!important;
+      transform:translateY(120px)!important;
+      z-index:20!important;
+      border-radius:15px!important;
+      background:
+        linear-gradient(145deg, rgba(20,30,52,.92), rgba(10,16,30,.96))!important;
+      border:1px solid rgba(105,155,255,.18)!important;
+      box-shadow:
+        0 16px 36px rgba(0,0,0,.34),
+        inset 0 1px 0 rgba(255,255,255,.05)!important;
+      font-size:12px!important;
+    }
+
+    .toast-modal.show{
+      transform:translateY(0)!important;
+      opacity:1!important;
+    }
+
+    .price-copy-v33 span{
+      display:block!important;
+      margin:0!important;
+      color:rgba(232,241,255,.86)!important;
+      font-size:10px!important;
+      font-weight:950!important;
+      letter-spacing:.08em!important;
+      line-height:1.2!important;
+      text-transform:uppercase!important;
+    }
+
+    .price-card-v33{
+      align-items:center!important;
+    }
+
+    .price-card-v33 #summaryTotal{
+      font-size:24px!important;
+    }
+
+    @media (max-width:380px){
+      .toast-modal{
+        left:12px!important;
+        right:12px!important;
+        bottom:10px!important;
+      }
+      .price-copy-v33 span{
+        font-size:10px!important;
+      }
+    }
+
+
+    /* v47 - login limpo: remove bloco superior de acesso seguro/ícone */
+    .secure-login-head,
+    .login-secure-head,
+    .secure-card,
+    .security-card,
+    .access-secure,
+    .auth-secure,
+    .login-security,
+    .login-hero-empty {
+      display:none!important;
+    }
+
+    .login-card-v18 > .divider:first-child,
+    .login-card-v18 > hr:first-child {
+      display:none!important;
+    }
+
+
+    /* v48 - topo renovação organizado com ícone do login */
+    .top-v48{
+      display:flex!important;
+      align-items:center!important;
+      justify-content:space-between!important;
+      gap:12px!important;
+      margin-bottom:16px!important;
+      padding:2px 0 2px!important;
+    }
+
+    .top-left-v48{
+      min-width:0!important;
+      display:flex!important;
+      align-items:center!important;
+      gap:12px!important;
+      flex:1 1 auto!important;
+    }
+
+    .top-brand-icon-v48{
+      position:relative!important;
+      width:52px!important;
+      height:52px!important;
+      flex:0 0 auto!important;
+      display:grid!important;
+      place-items:center!important;
+      border-radius:18px!important;
+      background:linear-gradient(135deg, #1f74ff 0%, #2998ff 45%, #5bc8ff 100%)!important;
+      color:#fff!important;
+      box-shadow:0 14px 30px rgba(31,116,255,.26), inset 0 1px 0 rgba(255,255,255,.14)!important;
+      overflow:hidden!important;
+    }
+
+    .top-brand-icon-v48::before{
+      content:""!important;
+      position:absolute!important;
+      inset:1px!important;
+      border-radius:17px!important;
+      background:linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,0) 46%)!important;
+      pointer-events:none!important;
+    }
+
+    .top-brand-icon-v48 span{
+      position:relative!important;
+      z-index:1!important;
+      font-size:22px!important;
+      font-weight:950!important;
+      letter-spacing:-.08em!important;
+      line-height:1!important;
+      color:#fff!important;
+    }
+
+    .top-brand-icon-v48 i{
+      position:absolute!important;
+      right:7px!important;
+      bottom:7px!important;
+      z-index:2!important;
+      width:16px!important;
+      height:16px!important;
+      display:grid!important;
+      place-items:center!important;
+      border-radius:999px!important;
+      background:rgba(8,18,36,.28)!important;
+      border:1px solid rgba(255,255,255,.18)!important;
+      font-size:8px!important;
+      color:#fff!important;
+      line-height:1!important;
+    }
+
+    .top-title-v48{
+      min-width:0!important;
+      display:flex!important;
+      flex-direction:column!important;
+      justify-content:center!important;
+      gap:2px!important;
+    }
+
+    .top-title-v48 strong{
+      display:block!important;
+      margin:0!important;
+      font-size:18px!important;
+      line-height:1.08!important;
+      letter-spacing:-.045em!important;
+      color:#f6f9ff!important;
+      text-shadow:none!important;
+    }
+
+    .exit-v48{
+      width:48px!important;
+      height:48px!important;
+      border-radius:17px!important;
+      background:linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.028))!important;
+      border:1px solid rgba(105,155,255,.12)!important;
+      color:rgba(246,249,255,.86)!important;
+      font-size:28px!important;
+      font-weight:700!important;
+      line-height:1!important;
+      display:grid!important;
+      place-items:center!important;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.04)!important;
+      backdrop-filter:blur(10px)!important;
+      -webkit-backdrop-filter:blur(10px)!important;
+    }
+
+    @media (max-width:380px){
+      .top-v48{margin-bottom:14px!important;}
+      .top-brand-icon-v48{width:48px!important;height:48px!important;border-radius:16px!important;}
+      .top-brand-icon-v48 span{font-size:20px!important;}
+      .top-title-v48 strong{font-size:17px!important;}
+      .exit-v48{width:46px!important;height:46px!important;font-size:26px!important;}
+    }
+
+
+    /* v49 - evita piscar tela de login ao recarregar com sessão salva */
+    body.booting .screen{
+      display:none!important;
+    }
+
+    body.booting::after{
+      content:"";
+      position:fixed;
+      inset:0;
+      z-index:9999;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(91,200,255,.15), transparent 34%),
+        linear-gradient(180deg, #050811, #0a1020);
+      pointer-events:none;
+    }
+
+    /* v49 - topo em card */
+    .top-v48{
+      padding:14px!important;
+      border-radius:26px!important;
+      background:
+        linear-gradient(145deg,
+          rgba(16,22,38,.82) 0%,
+          rgba(12,18,31,.76) 42%,
+          rgba(7,11,20,.86) 100%)!important;
+      border:1px solid rgba(105,155,255,.15)!important;
+      box-shadow:
+        0 18px 44px rgba(0,0,0,.32),
+        inset 0 1px 0 rgba(255,255,255,.06)!important;
+      backdrop-filter:blur(18px) saturate(145%)!important;
+      -webkit-backdrop-filter:blur(18px) saturate(145%)!important;
+      margin-bottom:16px!important;
+    }
+
+    .top-v48::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:26px;
+      pointer-events:none;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(91,200,255,.10), transparent 32%),
+        radial-gradient(circle at 100% 100%, rgba(31,116,255,.08), transparent 34%);
+    }
+
+    .top-v48 > *{
+      position:relative;
+      z-index:1;
+    }
+
+    @media (max-width:380px){
+      .top-v48{
+        padding:12px!important;
+        border-radius:24px!important;
+      }
+    }
+
+
+    /* v52 - remove frase abaixo de Renovação concluída */
+    #paidMessage{
+      display:none!important;
+    }
+
+
+  </style>
+</head>
+
+<body class="booting">
+  <main class="app">
+    <section id="loginScreen" class="screen login-screen active">
+      <div class="login-pro-v21">
+        <div class="login-brand-v21">
+          <div class="logo-v21">
+            <span>P</span>
+            <i class="fas fa-bolt"></i>
+          </div>
+          <h1>Renovar acesso</h1>
+          <p>Entre com sua conta para continuar.</p>
+        </div>
+
+        <div class="login-card-v21">
+         
+          <div id="loginError" class="error"></div>
+
+          <form id="loginForm" class="form-v21">
+            <label>
+              <span>Usuário</span>
+              <div class="input-group-v21">
+                <i class="fas fa-user"></i>
+                <input id="username" autocomplete="username" placeholder="Digite seu usuário" required />
+              </div>
+            </label>
+
+            <label>
+              <span>Senha</span>
+              <div class="input-group-v21 password-group-v21">
+                <i class="fas fa-key"></i>
+                <input id="password" type="password" autocomplete="current-password" placeholder="Digite sua senha" required />
+                <button id="togglePassword" class="show-pass-v21" type="button">
+                  <i class="fas fa-eye"></i>
+                </button>
+              </div>
+            </label>
+
+            <button id="loginBtn" class="primary login-btn-v21" type="submit">
+              <span>Entrar</span>
+              <i class="fas fa-arrow-right"></i>
+            </button>
+          </form>
+
+          <div class="login-features-v21">
+            <div><i class="fas fa-shield-halved"></i><span>Proteção</span></div>
+            <div><i class="fas fa-credit-card"></i><span>Pagamento</span></div>
+            <div><i class="fas fa-rotate"></i><span>Auto-renovação</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="renewScreen" class="screen">
+      <header class="top top-v48">
+        <div class="top-left-v48">
+          <div class="top-brand-icon-v48">
+            <span>P</span>
+            <i class="fas fa-bolt"></i>
+          </div>
+          <div class="top-title top-title-v48">
+            <strong>Renovar conta</strong>
+            <span id="topUser" style="display:none;">—</span>
+          </div>
+        </div>
+        <button id="logoutBtn" class="exit exit-v48" type="button">×</button>
+      </header>
+
+      <article class="card account-card account-card-v14">
+        <div class="account-top-v14">
+          <div class="avatar avatar-v14"><i class="fas fa-user"></i></div>
+          <div class="account-main-v14">
+            <strong id="profileName">—</strong>
+            <span id="sellerLine">—</span>
+          </div>
+        </div>
+
+        <div class="account-strip-v14">
+          <div>
+            <span>Validade</span>
+            <strong id="infoExpire">—</strong>
+          </div>
+          <div>
+            <span>Status</span>
+            <strong id="infoStatus">—</strong>
+          </div>
+        </div>
+
+        <div class="hidden-account-fields" hidden>
+          <span id="infoUser">—</span>
+          <span id="infoSeller">—</span>
+        </div>
+      </article>
+
+      <article id="renewPanel" class="card renew-card renew-card-v14">
+        <div class="renew-head-v14">
+          <div>
+            <h2>Renovar conta</h2>
+            <p>Escolha por quantos meses deseja renovar.</p>
+          </div>
+          <div class="pay-ok pay-ok-v14">Pix ativo</div>
+        </div>
+
+        <div id="plans" class="period-tabs-v14"></div>
+
+        <div class="price-card-v14 price-card-v33">
+          <div class="price-copy-v33">
+            <span>TOTAL A PAGAR</span>
+            
+          </div>
+          <strong id="summaryTotal">R$ 0,00</strong>
+          <span id="summaryPeriod" hidden>—</span>
+          <span id="summaryPlan" hidden>—</span>
+        </div>
+
+        <div class="validity-card-v14">
+          <div>
+            <span>Validade atual</span>
+            <strong id="currentValidityText">—</strong>
+          </div>
+          <div class="validity-arrow-v14">→</div>
+          <div>
+            <span>Nova validade</span>
+            <strong id="newValidityText">—</strong>
+          </div>
+        </div>
+
+        <span id="summaryUser" hidden>—</span>
+        <button id="payBtn" class="primary clean-pay-btn login-btn-v21 action-btn-v36" type="button">Gerar pagamento</button>
+      </article>
+
+      <article id="blockedPanel" class="card blocked-card">
+        <div class="blocked-icon">⚠️</div>
+        <h2>Pagamento indisponível</h2>
+        <p>A revenda desta conta ainda não configurou um meio de pagamento. Os planos não serão exibidos.</p>
+        <div style="height:14px"></div>
+        <button id="blockedLogoutBtn" class="ghost" type="button">Sair</button>
+      </article>
+    </section>
+  </main>
+
+  <dialog id="pixDialog">
+    <div class="modal payment-modal clean-payment-modal">
+      <div id="pixPending">
+        <div class="checkout-head">
+          <button id="closePixBtn" class="modal-close" type="button">×</button>
+          <span id="paymentStatus" class="checkout-status">Aguardando pagamento</span>
+          <h3 id="paymentTitle">Renovar Conta</h3>
+          <p id="paymentHint">Acesse o link de pagamento. Quando o pagamento for aprovado, a renovação aparece automaticamente.</p>
+        </div>
+
+        <div class="checkout-summary">
+          <div>
+            <span>Plano</span>
+            <strong id="paymentPlanLabel">—</strong>
+          </div>
+          <div>
+            <span>Total</span>
+            <strong id="paymentAmount">R$ 0,00</strong>
+          </div>
+        </div>
+
+        <div id="qrBox" class="qr clean-qr"></div>
+
+        <div class="checkout-link-box">
+          <span id="paymentCodeLabel">Link de pagamento</span>
+          <input id="pixCode" readonly />
+          <div class="checkout-actions">
+            <button id="openPaymentBtn" class="primary login-btn-v21 action-btn-v36 open-pay-btn-v36" type="button" hidden>Abrir pagamento</button>
+            <button id="copyBtn" class="ghost compact-btn copy-btn-v36" type="button">Copiar</button>
+          </div>
+        </div>
+
+        <div class="auto-status">
+          <span class="pulse"></span>
+          <div>
+            <strong>Verificando automaticamente</strong>
+            <small id="paymentAutoText">A cada 3 segundos</small>
+          </div>
+        </div>
+
+        <button id="checkPayBtn" class="ghost compact-btn" type="button" hidden>Verificar agora</button>
+      </div>
+
+      <div id="pixPaid" class="paid clean-success">
+
+        <div class="check"><i class="fas fa-check"></i></div>
+        <h3>Renovação concluída</h3>
+        <p id="paidMessage" hidden></p>
+
+        <div class="success-validity clean-success-validity success-validity-v35">
+          <span>Nova validade</span>
+          <strong id="paidValidity">—</strong>
+        </div>
+
+        <button id="finishBtn" class="primary login-btn-v21 finish-btn-v35" type="button">Concluir</button>
+      </div>
+      <div id="modalToast" class="toast toast-modal"></div>
+    </div>
+  </dialog>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    /*
+      API necessária no Bot Go:
+
+      POST /api/renovacao/login
+      Body: { "username": "usuario", "password": "senha" }
+
+      Resposta:
+      {
+        "ok": true,
+        "token": "token",
+        "account": {
+          "username": "cliente",
+          "displayName": "cliente",
+          "expiresAt": "2026-07-11",
+          "status": "Ativa"
+        },
+        "seller": {
+          "id": 10,
+          "name": "Revenda",
+          "paymentConfigured": true
+        },
+        "plans": [
+          { "id": "30d", "name": "30 dias", "days": 30, "price": 20.00, "description": "Renovação mensal" },
+          { "id": "60d", "name": "60 dias", "days": 60, "price": 38.00, "description": "Mais economia", "popular": true },
+          { "id": "90d", "name": "90 dias", "days": 90, "price": 55.00, "description": "Melhor custo" }
+        ]
+      }
+
+      POST /api/renovacao/pix
+      Header: Authorization: Bearer token
+      Body: { "planId": "30d" }
+
+      GET /api/renovacao/pix/status?paymentId=ID
+    */
+
+    const API_BASE = new URLSearchParams(location.search).get("api")
+      || (location.hostname === "api.primecel.shop" ? location.origin : "https://api.primecel.shop");
+
+    const API = {
+      login: `${API_BASE}/api/renovacao/login`,
+      session: `${API_BASE}/api/renovacao/session`,
+      pix: `${API_BASE}/api/renovacao/pix`,
+      pixStatus: `${API_BASE}/api/renovacao/pix/status`
+    };
+
+    const money = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
+
+    const SESSION_KEY = "primecel_renovacao_session_v1";
+    const SESSION_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+
+    const state = {
+      token: "",
+      account: null,
+      seller: null,
+      plans: [],
+      selectedPlan: null,
+      paymentId: "",
+      paymentUrl: "",
+      paymentPollTimer: null,
+      expectedExpiresAt: ""
+    };
+
+    const el = {
+      loginScreen: document.getElementById("loginScreen"),
+      renewScreen: document.getElementById("renewScreen"),
+      loginForm: document.getElementById("loginForm"),
+      username: document.getElementById("username"),
+      password: document.getElementById("password"),
+      togglePassword: document.getElementById("togglePassword"),
+      loginBtn: document.getElementById("loginBtn"),
+      loginError: document.getElementById("loginError"),
+
+      topUser: document.getElementById("topUser"),
+      logoutBtn: document.getElementById("logoutBtn"),
+      blockedLogoutBtn: document.getElementById("blockedLogoutBtn"),
+
+      profileName: document.getElementById("profileName"),
+      sellerLine: document.getElementById("sellerLine"),
+      infoExpire: document.getElementById("infoExpire"),
+      infoStatus: document.getElementById("infoStatus"),
+
+      renewPanel: document.getElementById("renewPanel"),
+      blockedPanel: document.getElementById("blockedPanel"),
+      plans: document.getElementById("plans"),
+      summaryPlan: document.getElementById("summaryPlan"),
+      summaryPeriod: document.getElementById("summaryPeriod"),
+      summaryUser: document.getElementById("summaryUser"),
+      summaryTotal: document.getElementById("summaryTotal"),
+      currentValidityText: document.getElementById("currentValidityText"),
+      newValidityText: document.getElementById("newValidityText"),
+      selectedPlanName: document.getElementById("selectedPlanName"),
+      selectedPlanPrice: document.getElementById("selectedPlanPrice"),
+      selectedPlanDesc: document.getElementById("selectedPlanDesc"),
+      currentValidityText: document.getElementById("currentValidityText"),
+      newValidityText: document.getElementById("newValidityText"),
+      payBtn: document.getElementById("payBtn"),
+
+      pixDialog: document.getElementById("pixDialog"),
+      pixPending: document.getElementById("pixPending"),
+      pixPaid: document.getElementById("pixPaid"),
+      paymentTitle: document.getElementById("paymentTitle"),
+      paymentHint: document.getElementById("paymentHint"),
+      paymentCodeLabel: document.getElementById("paymentCodeLabel"),
+      paymentStatus: document.getElementById("paymentStatus"),
+      paymentPlanLabel: document.getElementById("paymentPlanLabel"),
+      paymentAmount: document.getElementById("paymentAmount"),
+      paymentAutoText: document.getElementById("paymentAutoText"),
+      paidValidity: document.getElementById("paidValidity"),
+      paidMessage: document.getElementById("paidMessage"),
+      qrBox: document.getElementById("qrBox"),
+      pixCode: document.getElementById("pixCode"),
+      copyBtn: document.getElementById("copyBtn"),
+      openPaymentBtn: document.getElementById("openPaymentBtn"),
+      closePixBtn: document.getElementById("closePixBtn"),
+      checkPayBtn: document.getElementById("checkPayBtn"),
+      finishBtn: document.getElementById("finishBtn"),
+
+      toast: document.getElementById("toast"),
+      modalToast: document.getElementById("modalToast")
+    };
+
+    function toast(message, forceModal = false) {
+      const target = ((forceModal || el.pixDialog.open) && el.modalToast) ? el.modalToast : el.toast;
+      if (!target) return;
+
+      if (target !== el.toast) {
+        el.toast.classList.remove("show");
+      }
+      if (target !== el.modalToast && el.modalToast) {
+        el.modalToast.classList.remove("show");
+      }
+
+      target.textContent = message;
+      target.classList.add("show");
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(() => target.classList.remove("show"), 2400);
+    }
+
+    function showError(message) {
+      el.loginError.textContent = message;
+      el.loginError.classList.add("show");
+    }
+
+    function clearError() {
+      el.loginError.textContent = "";
+      el.loginError.classList.remove("show");
+    }
+
+    function loadingLogin(active) {
+      el.loginBtn.disabled = active;
+      el.loginBtn.innerHTML = active ? '<span class="spinner"></span>Entrando...' : 'Entrar';
+    }
+
+    function loadingPay(active) {
+      el.payBtn.disabled = active;
+      el.payBtn.innerHTML = active ? '<span class="spinner"></span>Gerando...' : 'Gerar pagamento';
+    }
+
+
+    function pickFirst(...values) {
+      for (const value of values) {
+        if (value !== undefined && value !== null && String(value).trim() !== "") return value;
+      }
+      return "";
+    }
+
+    function normalizeDateValue(value) {
+      if (!value) return "";
+
+      if (typeof value === "number") {
+        const date = new Date(value > 100000000000 ? value : value * 1000);
+        return Number.isNaN(date.getTime()) ? "" : date.toISOString().slice(0, 10);
+      }
+
+      const text = String(value).trim();
+
+      const br = text.match(/^(\d{2})\/(\d{2})\/(\d{4})/);
+      if (br) return `${br[3]}-${br[2]}-${br[1]}`;
+
+      const iso = text.match(/^(\d{4})-(\d{2})-(\d{2})/);
+      if (iso) return `${iso[1]}-${iso[2]}-${iso[3]}`;
+
+      const date = new Date(text);
+      return Number.isNaN(date.getTime()) ? "" : date.toISOString().slice(0, 10);
+    }
+
+    function displayDateFromExpiresAt(value) {
+      if (!value) return "";
+      const text = String(value).trim();
+      if (!text) return "";
+
+      const hasTime = /[tT ]\d{2}:\d{2}/.test(text);
+      const date = new Date(text);
+      if (Number.isNaN(date.getTime())) return normalizeDateValue(value);
+
+      const isMidnight = hasTime && date.getUTCHours() === 0 && date.getUTCMinutes() === 0 && date.getUTCSeconds() === 0;
+      if (isMidnight) {
+        date.setUTCDate(date.getUTCDate() - 1);
+        return date.toISOString().slice(0, 10);
+      }
+
+      return normalizeDateValue(value);
+    }
+
+    function getAccountExpiry(account = {}) {
+      const explicitExpiry = normalizeDateValue(pickFirst(
+        account.expiryDate,
+        account.expiry_date,
+        account.validity,
+        account.validade,
+        account.expirationDate,
+        account.expiration_date,
+        account.validUntil,
+        account.valid_until,
+        account.renewedUntil,
+        account.renewed_until,
+        account.expire,
+        account.expires,
+        account.vencimento,
+        account.data_validade
+      ));
+
+      if (explicitExpiry) return explicitExpiry;
+
+      const rawExpiresAt = pickFirst(
+        account.expiresAt,
+        account.expires_at,
+        account.expireAt,
+        account.expire_at
+      );
+
+      return displayDateFromExpiresAt(rawExpiresAt);
+    }
+
+
+    function parseMoneyLike(value) {
+      if (value === undefined || value === null || value === "") return 0;
+      if (typeof value === "number") return Number.isFinite(value) ? value : 0;
+      const normalized = String(value)
+        .replace(/\s+/g, "")
+        .replace(/\./g, "")
+        .replace(",", ".")
+        .replace(/[^\d.-]/g, "");
+      const num = Number(normalized);
+      return Number.isFinite(num) ? num : 0;
+    }
+
+    function getAccountMonthlyPrice(account = {}) {
+      return parseMoneyLike(pickFirst(
+        account.monthlyValue,
+        account.monthly_value,
+        account.valorMensal,
+        account.valor_mensal,
+        account.price,
+        account.valor,
+        account.value,
+        account.amount,
+        account.preco,
+        account.monthlyPrice,
+        account.monthly_price,
+        account.renewalPrice,
+        account.renewal_price,
+        account.salePrice,
+        account.sale_price
+      ));
+    }
+
+    function ensureMonthlyPlan(plans = [], account = {}) {
+      const next = Array.isArray(plans) ? plans.map(plan => ({ ...plan })) : [];
+      const accountMonthlyPrice = getAccountMonthlyPrice(account);
+      const index = next.findIndex(plan => planMonths(plan) === 1);
+      const currentPlanPrice = index >= 0 ? parseMoneyLike(next[index].price ?? next[index].amount) : 0;
+      const monthlyPrice = accountMonthlyPrice > 0 ? accountMonthlyPrice : currentPlanPrice;
+
+      if (index >= 0) {
+        next[index] = {
+          ...next[index],
+          id: next[index].id || "m:1",
+          name: next[index].name || "Mensal",
+          description: next[index].description || "Renovação por 1 mês",
+          months: 1,
+          price: monthlyPrice,
+          amount: monthlyPrice
+        };
+      } else {
+        next.unshift({
+          id: "m:1",
+          name: "Mensal",
+          description: "Renovação por 1 mês",
+          months: 1,
+          price: monthlyPrice,
+          amount: monthlyPrice
+        });
+      }
+
+      return next
+        .sort((a, b) => planMonths(a) - planMonths(b))
+        .filter((plan, index, arr) => arr.findIndex(item => planMonths(item) === planMonths(plan)) === index);
+    }
+
+    function normalizeAccount(account = {}) {
+      const username = pickFirst(account.username, account.user, account.usuario, account.login, account.name);
+      const displayName = pickFirst(account.displayName, account.display_name, account.nome, account.name, username);
+      const expiresAt = getAccountExpiry(account);
+      const rawExpiresAt = normalizeDateValue(pickFirst(account.expiresAt, account.expires_at, account.expireAt, account.expire_at));
+      const status = pickFirst(account.status, account.estado, account.state, expiresAt ? "Ativa" : "");
+      return { ...account, username, displayName, expiresAt, expiryDate: expiresAt, rawExpiresAt, status };
+    }
+
+    function formatDate(value) {
+      const normalized = normalizeDateValue(value);
+      if (!normalized) return "—";
+      const parts = normalized.split("-");
+      if (parts.length === 3) return `${parts[2]}/${parts[1]}/${parts[0]}`;
+      return String(value);
+    }
+
+    async function apiLogin(username, password) {
+      const response = await fetch(API.login, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify({ username, password })
+      });
+
+      let data = null;
+      try { data = await response.json(); } catch (_) {}
+
+      if (!response.ok || !data?.ok) {
+        throw new Error(data?.message || "Usuário ou senha inválidos, ou API do bot não conectada.");
+      }
+
+      return data;
+    }
+
+    function cacheSession(data) {
+      try {
+        if (!data?.token) return;
+        localStorage.setItem(SESSION_KEY, JSON.stringify({
+          savedAt: Date.now(),
+          token: data.token,
+          account: data.account || null,
+          seller: data.seller || null,
+          plans: Array.isArray(data.plans) ? data.plans : []
+        }));
+      } catch (_) {}
+    }
+
+    function readCachedSession() {
+      try {
+        const raw = localStorage.getItem(SESSION_KEY);
+        if (!raw) return null;
+        const cached = JSON.parse(raw);
+        if (!cached?.token || !cached?.savedAt) return null;
+        if (Date.now() - Number(cached.savedAt) > SESSION_TTL_MS) {
+          clearCachedSession();
+          return null;
+        }
+        return cached;
+      } catch (_) {
+        clearCachedSession();
+        return null;
+      }
+    }
+
+    function clearCachedSession() {
+      try { localStorage.removeItem(SESSION_KEY); } catch (_) {}
+    }
+
+    async function refreshSessionFromToken(token) {
+      const response = await fetch(API.session, {
+        method: "GET",
+        headers: {
+          "Accept": "application/json",
+          "Authorization": `Bearer ${token}`
+        }
+      });
+
+      let data = null;
+      try { data = await response.json(); } catch (_) {}
+
+      if (!response.ok || !data?.ok) {
+        throw new Error(data?.message || "sessão expirada");
+      }
+
+      return data;
+    }
+
+    async function restoreCachedLogin() {
+      const cached = readCachedSession();
+      if (!cached) {
+        document.body.classList.remove("booting");
+        return;
+      }
+
+      state.token = cached.token;
+
+      if (cached.account) {
+        setSession({
+          ok: true,
+          token: cached.token,
+          account: cached.account,
+          seller: cached.seller || {},
+          plans: Array.isArray(cached.plans) ? cached.plans : []
+        }, false);
+      }
+
+      document.body.classList.remove("booting");
+      loadingLogin(true);
+
+      try {
+        const data = await refreshSessionFromToken(cached.token);
+        setSession(data, true);
+      } catch (_) {
+        clearCachedSession();
+        logout(false);
+      } finally {
+        loadingLogin(false);
+        document.body.classList.remove("booting");
+      }
+    }
+
+    function expireSession(message) {
+      clearCachedSession();
+      logout(false);
+      showError(message || "Sessão expirada. Entre novamente.");
+    }
+
+    function dedupePlans(plans) {
+      const byPeriod = new Map();
+
+      for (const original of plans || []) {
+        const plan = { ...original };
+        const months = Number(plan.months || 0);
+        const days = Number(plan.days || 0);
+        const price = Number(plan.price || plan.amount || 0);
+
+        if (!price || (!months && !days)) continue;
+
+        const key = months > 0 ? `m:${months}` : `d:${days}`;
+        const old = byPeriod.get(key);
+
+        plan.price = price;
+        plan.amount = price;
+
+        if (months === 1) plan.name = "Mensal";
+        if (months > 1) plan.name = `${months} meses`;
+
+        if (!old || price < Number(old.price || old.amount || 0)) {
+          byPeriod.set(key, plan);
+        }
+      }
+
+      const clean = Array.from(byPeriod.values()).sort((a, b) => {
+        const ma = Number(a.months || Math.ceil(Number(a.days || 0) / 30));
+        const mb = Number(b.months || Math.ceil(Number(b.days || 0) / 30));
+        return ma - mb || Number(a.price || 0) - Number(b.price || 0);
+      });
+
+      let popularSet = false;
+      for (const plan of clean) {
+        plan.popular = false;
+        if (!popularSet && Number(plan.months || 0) === 2) {
+          plan.popular = true;
+          popularSet = true;
+        }
+      }
+
+      return clean;
+    }
+
+    function setSession(data, saveCache = true) {
+      if (saveCache) cacheSession(data);
+      state.token = data.token || "";
+      state.account = normalizeAccount(data.account || data.user || {});
+      state.seller = data.seller || data.revenda || data.reseller || {};
+      state.plans = ensureMonthlyPlan(dedupePlans(Array.isArray(data.plans) ? data.plans : []), state.account || {});
+      state.selectedPlan = state.plans.find(plan => planMonths(plan) === 1) || state.plans[0] || null;
+
+      render();
+    }
+
+    function render() {
+      const account = state.account || {};
+      const seller = state.seller || {};
+
+      el.topUser.textContent = account.username || "—";
+      el.profileName.textContent = account.displayName || account.username || "Cliente";
+      el.sellerLine.textContent = (seller.name || seller.nome) ? `Vendedor: ${seller.name || seller.nome}` : "Vendedor: —";
+      el.infoExpire.textContent = formatDate(account.expiresAt);
+      const statusText = account.status || (account.expiresAt ? "Ativa" : "—");
+      el.infoStatus.textContent = statusText;
+      el.infoStatus.className =
+        String(statusText || "").toLowerCase().includes("expir") ? "status-warn" :
+        String(statusText || "").toLowerCase().includes("bloq") ? "status-bad" :
+        "status-ok";
+
+      el.loginScreen.classList.remove("active");
+      el.renewScreen.classList.add("active");
+
+      if (seller.paymentConfigured !== true) {
+        el.renewPanel.hidden = true;
+        el.blockedPanel.classList.add("show");
+        return;
+      }
+
+      el.renewPanel.hidden = false;
+      el.blockedPanel.classList.remove("show");
+
+      renderPlans();
+      renderSummary();
+    }
+
+    function planMonths(plan) {
+      const months = Number(plan?.months || 0);
+      if (months > 0) return months;
+      const days = Number(plan?.days || 0);
+      return Math.max(1, Math.round(days / 30));
+    }
+
+    function planDays(plan) {
+      const days = Number(plan?.days || 0);
+      if (days > 0) return days;
+      return planMonths(plan) * 30;
+    }
+
+    function monthLabel(plan) {
+      const months = planMonths(plan);
+      return months === 1 ? "mês" : "meses";
+    }
+
+    function parseDate(value) {
+      const normalized = normalizeDateValue(value);
+      if (!normalized) return null;
+      const d = new Date(`${normalized}T12:00:00`);
+      return Number.isNaN(d.getTime()) ? null : d;
+    }
+
+    function isoDate(date) {
+      return date.toISOString().slice(0, 10);
+    }
+
+    function calculateNewValidity(plan) {
+      const now = new Date();
+      now.setHours(12, 0, 0, 0);
+
+      const current = parseDate(state.account?.expiryDate || state.account?.expiresAt);
+      const base = current && current > now ? current : now;
+      const result = new Date(base.getTime());
+
+      const months = Number(plan?.months || 0);
+      if (months > 0) {
+        result.setMonth(result.getMonth() + months);
+      } else {
+        result.setDate(result.getDate() + planDays(plan));
+      }
+
+      return isoDate(result);
+    }
+
+    function approvedStatus(status) {
+      const s = String(status || "").toLowerCase();
+      return ["approved", "paid", "confirmed", "completed", "success"].includes(s);
+    }
+
+    function extractNewValidity(data) {
+      return data?.newExpiryDate
+        || data?.new_expiry_date
+        || data?.expiryDate
+        || data?.expiry_date
+        || data?.account?.expiryDate
+        || data?.account?.expiry_date
+        || data?.account?.validity
+        || data?.newValidity
+        || data?.new_validity
+        || data?.renewedUntil
+        || displayDateFromExpiresAt(data?.newExpiresAt)
+        || displayDateFromExpiresAt(data?.expiresAt)
+        || displayDateFromExpiresAt(data?.account?.expiresAt)
+        || state.expectedExpiresAt
+        || state.account?.expiryDate
+        || state.account?.expiresAt
+        || "";
+    }
+
+    function renderPlans() {
+      el.plans.innerHTML = "";
+
+      state.plans.forEach(plan => {
+        const months = planMonths(plan);
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "period-tab-v14" + (state.selectedPlan?.id === plan.id ? " active" : "");
+        btn.innerHTML = `
+          <b>${months}</b>
+          <span>${months === 1 ? "mês" : "meses"}</span>
+        `;
+
+        btn.addEventListener("click", () => {
+          state.selectedPlan = plan;
+          renderPlans();
+          renderSummary();
+        });
+
+        el.plans.appendChild(btn);
+      });
+    }
+
+    function renderSummary() {
+      const plan = state.selectedPlan;
+      const months = plan ? planMonths(plan) : 0;
+      const newValidity = plan ? calculateNewValidity(plan) : "";
+
+      state.expectedExpiresAt = newValidity;
+
+      if (el.summaryPeriod) {
+        el.summaryPeriod.textContent = months ? `${months} ${months === 1 ? "mês" : "meses"}` : "—";
+      }
+      if (el.summaryPlan) {
+        el.summaryPlan.textContent = plan ? (plan.name || `${months} ${months === 1 ? "mês" : "meses"}`) : "—";
+      }
+      if (el.summaryUser) el.summaryUser.textContent = state.account?.username || "—";
+      if (el.summaryTotal) el.summaryTotal.textContent = money.format(Number(plan?.price || 0));
+      if (el.currentValidityText) el.currentValidityText.textContent = formatDate(state.account?.expiresAt);
+      if (el.newValidityText) el.newValidityText.textContent = newValidity ? formatDate(newValidity) : "—";
+      el.payBtn.disabled = !plan;
+    }
+
+    function stopAutoVerification() {
+      if (state.paymentPollTimer) {
+        clearInterval(state.paymentPollTimer);
+        state.paymentPollTimer = null;
+      }
+    }
+
+    function startAutoVerification() {
+      stopAutoVerification();
+
+      let attempts = 0;
+      el.paymentAutoText.textContent = "Consultando pagamento a cada 3 segundos...";
+
+      state.paymentPollTimer = setInterval(async () => {
+        attempts += 1;
+        el.paymentAutoText.textContent = `Verificando automaticamente... tentativa ${attempts}`;
+
+        await checkPayment(false);
+
+        if (attempts >= 240) {
+          stopAutoVerification();
+          el.paymentAutoText.textContent = "Verificação automática pausada. Use Verificar agora.";
+        }
+      }, 3000);
+    }
+
+    async function createPix() {
+      if (!state.selectedPlan) {
+        toast("Escolha um período.");
+        return;
+      }
+
+      loadingPay(true);
+      stopAutoVerification();
+
+      try {
+        const response = await fetch(API.pix, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "Authorization": `Bearer ${state.token}`
+          },
+          body: JSON.stringify({ planId: state.selectedPlan.id })
+        });
+
+        let data = null;
+        try { data = await response.json(); } catch (_) {}
+
+        if (response.status === 401) {
+          expireSession("Sessão expirada. Entre novamente para gerar o pagamento.");
+          return;
+        }
+
+        if (!response.ok) {
+          throw new Error(data?.message || "Não foi possível gerar o pagamento.");
+        }
+
+        state.paymentId = data?.paymentId || data?.orderId || "";
+        state.paymentUrl = data?.paymentUrl || data?.payment_url || data?.checkoutUrl || data?.checkout_url || data?.url || "";
+        const copyPaste = data?.copyPaste || data?.pixCopyPaste || data?.pix || "";
+
+        const plan = state.selectedPlan;
+        const months = planMonths(plan);
+        const amount = Number(data?.amount ?? plan?.price ?? 0);
+
+        if (el.paymentPlanLabel) el.paymentPlanLabel.textContent = plan?.name || `${months} ${months === 1 ? "mês" : "meses"}`;
+        if (el.paymentAmount) el.paymentAmount.textContent = money.format(Number(plan?.price || 0));
+        if (el.paymentStatus) el.paymentStatus.textContent = "Aguardando pagamento";
+
+        if (approvedStatus(data?.status) || data?.applied === true || amount <= 0) {
+          if (el.paymentStatus) el.paymentStatus.textContent = "Renovação liberada";
+          el.pixPending.style.display = "none";
+          el.pixPaid.style.display = "block";
+          el.pixDialog.showModal();
+          showPaymentApproved(data || {});
+          return;
+        }
+
+        if (!copyPaste && !state.paymentUrl) {
+          throw new Error("Renovar Conta sem Pix ou link de pagamento.");
+        }
+
+        if (copyPaste) {
+          el.paymentTitle.textContent = "Renovar Conta";
+          el.paymentHint.textContent = "Acesse o link de pagamento. Quando o pagamento for aprovado, a renovação aparece automaticamente.";
+          el.paymentCodeLabel.textContent = "Código Pix";
+          el.pixCode.value = copyPaste;
+          el.qrBox.hidden = false;
+          el.openPaymentBtn.hidden = true;
+        } else {
+          el.paymentTitle.textContent = "Renovar Conta";
+          el.paymentHint.textContent = "Acesse o link de pagamento. Quando o pagamento for aprovado, a renovação aparece automaticamente.";
+          el.paymentCodeLabel.textContent = "Link de pagamento";
+          el.pixCode.value = state.paymentUrl;
+          el.qrBox.hidden = true;
+          el.openPaymentBtn.hidden = false;
+        }
+
+        el.pixPending.style.display = "block";
+        el.pixPaid.style.display = "none";
+        el.pixDialog.showModal();
+        startAutoVerification();
+      } catch (error) {
+        toast(error.message || "Erro ao gerar pagamento.");
+      } finally {
+        loadingPay(false);
+      }
+    }
+
+    async function showPaymentApproved(data = {}) {
+      stopAutoVerification();
+
+      let validity = extractNewValidity(data);
+      if (data?.account) {
+        state.account = { ...state.account, ...data.account };
+      }
+      if (validity) {
+        state.account = { ...state.account, expiresAt: validity, expiryDate: validity, status: "Ativa" };
+      }
+
+      if (state.token) {
+        try {
+          const fresh = await refreshSessionFromToken(state.token);
+          setSession(fresh, true);
+          validity = normalizeDateValue(state.account?.expiresAt || validity);
+        } catch (_) {}
+      } else {
+        render();
+      }
+
+      if (el.paymentStatus) el.paymentStatus.textContent = "Pagamento aprovado";
+      el.paidValidity.textContent = validity ? formatDate(validity) : "Atualizada";
+      el.paidMessage.textContent = validity
+        ? `Pagamento aprovado. Sua conta foi renovada até ${formatDate(validity)}.`
+        : "Pagamento aprovado. Sua conta foi renovada com sucesso.";
+
+      el.pixPending.style.display = "none";
+      el.pixPaid.style.display = "block";
+    }
+
+    async function checkPayment(manual = true) {
+      if (!state.paymentId) {
+        if (manual) toast("Pagamento ainda sem ID.");
+        return;
+      }
+
+      if (manual) {
+        el.checkPayBtn.disabled = true;
+        el.checkPayBtn.innerHTML = '<span class="spinner"></span>Verificando...';
+      }
+
+      try {
+        const params = new URLSearchParams({ paymentId: state.paymentId });
+        if (state.redirectPayment?.orderNsu) params.set("order_nsu", state.redirectPayment.orderNsu);
+        if (state.redirectPayment?.transactionNsu) params.set("transaction_nsu", state.redirectPayment.transactionNsu);
+        if (state.redirectPayment?.slug) params.set("slug", state.redirectPayment.slug);
+        const url = `${API.pixStatus}?${params.toString()}`;
+        const response = await fetch(url, {
+          headers: {
+            "Accept": "application/json",
+            "Authorization": `Bearer ${state.token}`
+          }
+        });
+
+        let data = null;
+        try { data = await response.json(); } catch (_) {}
+
+        if (response.status === 401) {
+          expireSession("Sessão expirada. Entre novamente para verificar o pagamento.");
+          return;
+        }
+
+        if (!response.ok) {
+          throw new Error(data?.message || "Não foi possível verificar o pagamento.");
+        }
+
+        if (approvedStatus(data?.status)) {
+          showPaymentApproved(data);
+        } else if (manual) {
+          toast("Pagamento ainda pendente.");
+        }
+      } catch (error) {
+        if (manual) toast(error.message || "Erro ao verificar pagamento.");
+      } finally {
+        if (manual) {
+          el.checkPayBtn.disabled = false;
+          el.checkPayBtn.textContent = "Verificar agora";
+        }
+      }
+    }
+
+    function logout(clearCache = true) {
+      stopAutoVerification();
+      if (clearCache) clearCachedSession();
+      state.token = "";
+      state.account = null;
+      state.seller = null;
+      state.plans = [];
+      state.selectedPlan = null;
+      state.paymentId = "";
+      state.paymentUrl = "";
+      state.expectedExpiresAt = "";
+
+      el.password.value = "";
+      el.renewScreen.classList.remove("active");
+      el.loginScreen.classList.add("active");
+      el.renewPanel.hidden = false;
+      el.blockedPanel.classList.remove("show");
+    }
+
+    el.username.addEventListener("input", () => {
+      const value = el.username.value;
+      if (!value) return;
+      const updated = value.charAt(0).toUpperCase() + value.slice(1);
+      if (updated !== value) {
+        const pos = el.username.selectionStart;
+        el.username.value = updated;
+        el.username.setSelectionRange(pos, pos);
+      }
+    });
+
+    el.loginForm.addEventListener("submit", async event => {
+      event.preventDefault();
+      clearError();
+
+      const username = el.username.value.trim();
+      const password = el.password.value;
+
+      if (!username || !password) {
+        showError("Informe usuário e senha.");
+        return;
+      }
+
+      loadingLogin(true);
+
+      try {
+        const data = await apiLogin(username, password);
+        setSession(data);
+      } catch (error) {
+        showError(error.message || "Não foi possível acessar.");
+      } finally {
+        loadingLogin(false);
+      }
+    });
+
+    el.togglePassword.addEventListener("click", () => {
+      const visible = el.password.type === "password";
+      el.password.type = visible ? "text" : "password";
+      el.togglePassword.innerHTML = visible ? '<i class="fas fa-eye-slash"></i>' : '<i class="fas fa-eye"></i>';
+    });
+
+    el.payBtn.addEventListener("click", createPix);
+    el.logoutBtn.addEventListener("click", logout);
+    el.blockedLogoutBtn.addEventListener("click", logout);
+    el.closePixBtn.addEventListener("click", () => {
+      stopAutoVerification();
+      el.pixDialog.close();
+    });
+    el.pixDialog.addEventListener("close", stopAutoVerification);
+    el.checkPayBtn.addEventListener("click", () => checkPayment(true));
+    el.openPaymentBtn.addEventListener("click", () => {
+      if (state.paymentUrl) window.open(state.paymentUrl, "_blank", "noopener,noreferrer");
+    });
+
+    el.copyBtn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(el.pixCode.value);
+        toast(el.paymentCodeLabel.textContent === "Link de pagamento" ? "Link copiado." : "Código Pix copiado.", true);
+      } catch (_) {
+        el.pixCode.select();
+        document.execCommand("copy");
+        toast(el.paymentCodeLabel.textContent === "Link de pagamento" ? "Link copiado." : "Código Pix copiado.", true);
+      }
+    });
+
+    el.finishBtn.addEventListener("click", () => {
+      stopAutoVerification();
+      el.pixDialog.close();
+      toast("Conta renovada com sucesso.");
+      if (state.token) refreshSessionFromToken(state.token).then(data => setSession(data, true)).catch(() => {});
+    });
+
+    restoreCachedLogin();
+    setTimeout(() => document.body.classList.remove("booting"), 1200);
+
+    setTimeout(() => {
+      const rp = state.redirectPayment;
+      if (rp?.orderNsu && rp?.transactionNsu && rp?.slug && state.token) {
+        state.paymentId = rp.orderNsu;
+        checkPayment(false);
+      }
+    }, 900);
+  </script>
+</body>
+</html>
