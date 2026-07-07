@@ -1,0 +1,12 @@
+{
+  "name": "primecel-whatsapp",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "main": "primecel-whatsapp.js",
+  "dependencies": {
+    "@whiskeysockets/baileys": "6.7.18",
+    "pino": "^9.6.0",
+    "qrcode-terminal": "^0.12.0"
+  }
+}
